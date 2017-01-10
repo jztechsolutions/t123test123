@@ -42,7 +42,7 @@ var api = new ParseServer({
   // The public URL of your app. 
   // This will appear in the link that is used to verify email addresses and reset passwords. 
   // Set the mount path as it is in serverURL 
-  publicServerURL: 'http://${SERVER_HOST}:${SERVER_PORT}/parse', //'http://localhost:1337/parse',//
+  publicServerURL: 'https://bodybookserver.herokuapp.com/parse', //'http://localhost:1337/parse',//
   // Your apps name. This will appear in the subject and body of the emails that are sent. 
   appName: 'Migraine Tracker',
   // The email adapter 
