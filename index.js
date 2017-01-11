@@ -12,7 +12,7 @@ if (!databaseUri) {
 }
 
 var api = new ParseServer({
-  databaseURI: databaseUri || 'mongodb://devteam:passw0rd@ds115738.mlab.com:15738/migraine_tracker',
+  databaseURI: databaseUri,
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
   appId: process.env.APP_ID || 'MigraineTracker',
   masterKey: process.env.MASTER_KEY || 'G6ZtgCr3efVhtMCR7XTGhEFAOYcAycsGT3aWIcCv', //Add your master key here. Keep it secret!  
@@ -33,7 +33,7 @@ var api = new ParseServer({
   // `emailVerifyTokenValidityDuration` defaults to `undefined` 
   // 
   // email verify token below expires in 2 hours (= 2 * 60 * 60 == 7200 seconds) 
-  emailVerifyTokenValidityDuration: 2 * 60 * 60, // in seconds (2 hours = 7200 seconds) 
+  emailVerifyTokenValidityDuration: 5 * 60 * 60, // in seconds (2 hours = 7200 seconds) 
  
   // set preventLoginWithUnverifiedEmail to false to allow user to login without verifying their email 
   // set preventLoginWithUnverifiedEmail to true to prevent user from login if their email is not verified 
@@ -61,14 +61,14 @@ var api = new ParseServer({
           subject: 'Reset your password',
           pathPlainText: resolve(__dirname, '/public/email-templates/password_reset_email.txt'),
           pathHtml: resolve(__dirname, '/public/email-templates/password_reset_email.html'),
-          callback: (user) => { return { email: user.get('email') }}
+          callback: (user) => {}
           // Now you can use {{firstName}} in your templates
         },
         verificationEmail: {
           subject: 'Confirm your account',
           pathPlainText: resolve(__dirname, '/public/email-templates/verification_email.txt'),
           pathHtml: resolve(__dirname, '/public/email-templates/verification_email.html'),
-          callback: (user) => { return { email: user.get('email') }}
+          callback: (user) => { }
           // Now you can use {{firstName}} in your templates
         }        
       }
