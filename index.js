@@ -60,15 +60,15 @@ var api = new ParseServer({
       templates: {
         passwordResetEmail: {
           subject: 'Reset your password',
-          pathPlainText: resolve(__dirname, '/public/email-templates/password_reset_email.txt'),
-          pathHtml: resolve(__dirname, '/public/email-templates/password_reset_email.html'),
+          pathPlainText: resolve(__dirname, '../public/email-templates/password_reset_email.txt'),
+          pathHtml: resolve(__dirname, '../public/email-templates/password_reset_email.html'),
           callback: (user) => { return { email: user.get('email') }}
           // Now you can use {{firstName}} in your templates
         },
         verificationEmail: {
           subject: 'Confirm your account',
-          pathPlainText: resolve(__dirname, '/public/email-templates/verification_email.txt'),
-          pathHtml: resolve(__dirname, '/public/email-templates/verification_email.html'),
+          pathPlainText: resolve(__dirname, '../public/email-templates/verification_email.txt'),
+          pathHtml: resolve(__dirname, '../public/email-templates/verification_email.html'),
           callback: (user) => { return { email: user.get('email') }}
           // Now you can use {{firstName}} in your templates
         }        
