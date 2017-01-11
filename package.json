@@ -1,7 +1,7 @@
 {
   "name": "parse-server",
   "version": "1.4.0",
-  "description": "An example Parse API server using the parse-server module",
+  "description": "BodyBookApp Server App",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -13,6 +13,7 @@
     "kerberos": "~0.0.x",
     "parse": "~1.8.0",
     "parse-server": "*",
+    "parse-server-mailgun": "^2.3.3",
     "parse-server-simple-mailgun-adapter": "^1.0.0"
   },
   "scripts": {
