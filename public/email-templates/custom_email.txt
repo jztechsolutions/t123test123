@@ -2,5 +2,5 @@ Hi {{username}},
 
 Thanks for using {{appName}}.
 
-The AwesomeApp Team
-https://awesomeapp.com
+Sincerely,
+The Migraine Tracker Team

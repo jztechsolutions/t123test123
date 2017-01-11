@@ -1,9 +1,11 @@
-Hi {{username}},
+Dear {{username}},
 
-Thanks for signing up for AwesomeApp!
-Please confirm your account by clicking on the link below.
+Thank you for signing up for Migraine Tracker mobile application.  
 
+In order to access to all features of the application, please confirm your account by clicking the verify link below.
+
+Verify now:
 {{link}}
 
-The AwesomeApp Team
-https://awesomeapp.com
+Sincerely,
+The Migraine Tracker Team
