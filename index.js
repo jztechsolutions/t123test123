@@ -42,35 +42,36 @@ var api = new ParseServer({
   // The public URL of your app. 
   // This will appear in the link that is used to verify email addresses and reset passwords. 
   // Set the mount path as it is in serverURL 
-  publicServerURL: 'https://bodybookapps.com/parse', //'http://localhost:1337/parse',//
+  publicServerURL: 'https://bodybookserver.herokuapp.com/parse', //'http://localhost:1337/parse',//
   // Your apps name. This will appear in the subject and body of the emails that are sent. 
   appName: 'Migraine Tracker',
   // The email adapter 
   emailAdapter:{
-    module: 'parse-server-simple-mailgun-adapter',
+    // module: 'parse-server-simple-mailgun-adapter',
+    module: 'parse-server-mailgun',
     options: {
       // The address that your emails come from 
-      fromAddress: 'no-reply-MigraineTracker@bodybookapps.com',
+      fromAddress: 'Migraine Tracker<no-reply-MigraineTracker@bodybookapps.com>',
       // Your domain from mailgun.com 
       domain: 'bodybookapps.com',
       // Your API key from mailgun.com 
       apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452',
-      // templates: {
-      //   passwordResetEmail: {
-      //     subject: 'Reset your password',
-      //     pathPlainText: resolve(__dirname, '../../password_reset_email.txt'),
-      //     pathHtml: resolve(__dirname, '../../password_reset_email.html'),
-      //     callback: (user) => { return { email: user.get('email') }}
-      //     // Now you can use {{firstName}} in your templates
-      //   },
-      //   verificationEmail: {
-      //     subject: 'Confirm your account',
-      //     pathPlainText: resolve(__dirname, '../../verification_email.txt'),
-      //     pathHtml: resolve(__dirname, '../../verification_email.html'),
-      //     callback: (user) => { return { email: user.get('email') }}
-      //     // Now you can use {{firstName}} in your templates
-      //   }        
-      // }
+      templates: {
+        passwordResetEmail: {
+          subject: 'Reset your password',
+          pathPlainText: resolve(__dirname, '/public/email-templates/password_reset_email.txt'),
+          pathHtml: resolve(__dirname, '/public/email-templates/password_reset_email.html'),
+          callback: (user) => { return { email: user.get('email') }}
+          // Now you can use {{firstName}} in your templates
+        },
+        verificationEmail: {
+          subject: 'Confirm your account',
+          pathPlainText: resolve(__dirname, '/public/email-templates/verification_email.txt'),
+          pathHtml: resolve(__dirname, '/public/email-templates/verification_email.html'),
+          callback: (user) => { return { email: user.get('email') }}
+          // Now you can use {{firstName}} in your templates
+        }        
+      }
     }
   },
 
