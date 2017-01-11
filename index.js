@@ -50,7 +50,7 @@ var api = new ParseServer({
     module: 'parse-server-simple-mailgun-adapter',
     options: {
       // The address that your emails come from 
-      fromAddress: 'no-reply-MigraineTracker@bodybookapps.com',
+      fromAddress: 'Migraine Tracker<no-reply-MigraineTracker@bodybookapps.com>',
       // Your domain from mailgun.com 
       domain: 'bodybookapps.com',
       // Your API key from mailgun.com 
