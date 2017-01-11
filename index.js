@@ -55,7 +55,7 @@ var api = new ParseServer({
       // Your domain from mailgun.com 
       domain: 'bodybookapps.com',
       // Your API key from mailgun.com 
-      apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452',
+      apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452'
       // templates: {
       //   passwordResetEmail: {
       //     subject: 'Reset your password',
