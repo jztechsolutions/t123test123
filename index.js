@@ -65,7 +65,7 @@ var api = new ParseServer({
           // Now you can use {{firstName}} in your templates
         },
         verificationEmail: {
-          subject: Please verify your email for MigraineTracker',
+          subject: 'Please verify your email for MigraineTracker',
           pathPlainText: path.join(__dirname, '/public/email-templates/verification_email.txt'),
           pathHtml: path.join(__dirname, '/public/email-templates/verification_email.html'),
           callback: (user) => { return { email: user.get('email') }}
