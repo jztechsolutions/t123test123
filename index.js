@@ -58,14 +58,14 @@ var api = new ParseServer({
       apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452',
       templates: {
         passwordResetEmail: {
-          subject: 'Reset your password',
+          subject: 'Password Reset Request for MigraineTracker',
           pathPlainText: path.join(__dirname, '/public/email-templates/password_reset_email.txt'),
           pathHtml: path.join(__dirname, '/public/email-templates/password_reset_email.html'),
           callback: (user) => { return { email: user.get('email') }}
           // Now you can use {{firstName}} in your templates
         },
         verificationEmail: {
-          subject: 'Confirm your account',
+          subject: Please verify your email for MigraineTracker',
           pathPlainText: path.join(__dirname, '/public/email-templates/verification_email.txt'),
           pathHtml: path.join(__dirname, '/public/email-templates/verification_email.html'),
           callback: (user) => { return { email: user.get('email') }}
