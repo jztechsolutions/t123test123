@@ -12,7 +12,7 @@ if (!databaseUri) {
 }
 
 var api = new ParseServer({
-  databaseURI: databaseUri,
+  databaseURI: databaseUri || 'mongodb://devteam:passw0rd@ds115738.mlab.com:15738/migraine_tracker',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
   appId: process.env.APP_ID || 'MigraineTracker',
   masterKey: process.env.MASTER_KEY || 'G6ZtgCr3efVhtMCR7XTGhEFAOYcAycsGT3aWIcCv', //Add your master key here. Keep it secret!  
