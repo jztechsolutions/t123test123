@@ -9,7 +9,7 @@ if (!databaseUri) {
 }
 
 var api = new ParseServer({
-  databaseURI: databaseUri || 'mongodb://devteam:passw0rd@ds115738.mlab.com:15738/migraine_tracker',
+  databaseURI: databaseUri,
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
   appId: process.env.APP_ID || 'MigraineTracker',
   masterKey: process.env.MASTER_KEY || 'G6ZtgCr3efVhtMCR7XTGhEFAOYcAycsGT3aWIcCv', //Add your master key here. Keep it secret!  
@@ -39,7 +39,7 @@ var api = new ParseServer({
   // The public URL of your app. 
   // This will appear in the link that is used to verify email addresses and reset passwords. 
   // Set the mount path as it is in serverURL 
-  publicServerURL: 'https://bodybook-api-dev.herokuapp.com/parse', //'http://localhost:1337/parse',//
+  publicServerURL: 'https://bodybook-api.herokuapp.com/parse', 
   // Your apps name. This will appear in the subject and body of the emails that are sent. 
   appName: 'Migraine Tracker',
   // The email adapter 
@@ -107,9 +107,6 @@ var api = new ParseServer({
 
 
 var app = express();
-
-// Serve static assets from the /public folder
-//app.use('/public', express.static(path.join(__dirname, '/public')));
 
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/parse';
