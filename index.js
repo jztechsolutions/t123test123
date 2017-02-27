@@ -13,7 +13,7 @@ var api = new ParseServer({
   cloud: process.env.CLOUD_CODE_MAIN || './cloud/main.js',
   appId: process.env.APP_ID || 'MigraineTracker',
   masterKey: process.env.MASTER_KEY || 'G6ZtgCr3efVhtMCR7XTGhEFAOYcAycsGT3aWIcCv', //Add your master key here. Keep it secret!  
-  serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
+  serverURL: process.env.SERVER_URL || 'https://bodybook-api.herokuapp.com/parse',//'http://localhost:1337/parse',  // Don't forget to change to https if needed
  
   // Disable Anonymous Users 
   enableAnonymousUsers: false,
