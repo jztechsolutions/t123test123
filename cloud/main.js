@@ -1,3 +1,7 @@
+Parse.Cloud.define('Hello', function(req, res) {
+  res.success('Hello from BodyBookApps Team');
+});
+
 //Helper
 function onlyUnique(value, index, self) { 
     return self.indexOf(value) === index;
