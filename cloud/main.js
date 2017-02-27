@@ -19,16 +19,42 @@ Parse.Cloud.define("adminDashboard", function(request, response) {
   //     response.error(errorMessageMaker("running chained function",error));
   //   }
   // });
-
-  userCount(function(userCountResults){
-    noTreatment(function(noTreatmentResults){
-      botoxTreatment(function(botoxTreatmentResults){             
-        medicineTreatment(function(medicineTreatmentResults){               
-          response.success({"UserCount":userCountResults,"NoTreatment":noTreatmentResults,"Botox":botoxTreatmentResults,"Medicine":medicineTreatmentResults});                        
-        });
+  var authorizedUser  = new Parse.Query("_User");
+  authorizedUser.limit(100);   
+  authorizedUser.equalTo("objectId", request.params.userId);
+  authorizedUser.find({
+    success: function(results) { 
+      var userType = _.map(results, function(result){  
+        if (result.get("userType") === undefined || userType === null) {        
+          return null;
+        }else{                
+          return result.get("userType").id;
+        }
       });
-    });                           
-  });      
+      if (userType != null){
+        if (userType[0] === "layp6jnX7U"){
+          userCount(function(userCountResults){
+            noTreatment(function(noTreatmentResults){
+              botoxTreatment(function(botoxTreatmentResults){             
+                medicineTreatment(function(medicineTreatmentResults){               
+                  response.success({"UserCount":userCountResults,"NoTreatment":noTreatmentResults,"Botox":botoxTreatmentResults,"Medicine":medicineTreatmentResults});                        
+                });
+              });
+            });
+          });
+        }else{
+          response.error("Unauthorized");
+        }
+      }else{
+        response.error("Unauthorized");
+      }
+      
+     },
+    error: function(error) {
+      response.error(error);
+    }                           
+        
+  });
 
   // var promises = [];
   // promises.push(userCount(function(result){}));
