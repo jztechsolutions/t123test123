@@ -73,8 +73,13 @@ Parse.Cloud.define("adminDashboard", function(request, response) {
 // Parse.Cloud.define("userCount", function(request, response) {  
 function userCount(callback) {
 
-  var patientEnrolledCount = 0;
-  var doctorEnrolledCount  = 0;
+  var regUserQuery = new Parse.Query(Parse.User);
+  regUserQuery.limit(100000);
+
+  var notVerifiedUserQuery = new Parse.Query(Parse.User);
+  notVerifiedUserQuery.limit(100000);
+  notVerifiedUserQuery.equalTo("emailVerified", false);
+  
 
   var patientQuery = new Parse.Query(Parse.User);
   patientQuery.limit(100000);
@@ -90,13 +95,15 @@ function userCount(callback) {
   doctorIsAddedQuery.limit(100000); 
 
   var promises = [];
+  promises.push(regUserQuery.find());
+  promises.push(notVerifiedUserQuery.find());
   promises.push(patientQuery.find());
   promises.push(doctorQuery.find());
   promises.push(doctorIsAddedQuery.find());
 
   Parse.Promise.when(promises).then(function(results){
     // response.success({"patientEnrolled":results[0].length,"doctorEnrolled":results[1].length,"doctorIsAdded":results[2].length-results[1].length});
-    var userCountJSON = {"patientEnrolled":results[0].length,"doctorEnrolled":results[1].length,"doctorIsAdded":results[2].length-results[1].length};
+    var userCountJSON = {"regUser":results[0].length,"notVerifiedUser":results[1].length,"patientEnrolled":results[2].length,"doctorEnrolled":results[3].length,"doctorIsAdded":results[4].length-results[3].length};
     // return userCountJSON;
     callback(userCountJSON);
   },function(error){
