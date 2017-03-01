@@ -7,8 +7,67 @@ function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
 }
 var _ = require('underscore');
+var adminObjectId = "layp6jnX7U";
+var adminPasscode = "0246810";
+// return a pointer to an object with a given id and given class
+function pointerTo(objectId, klass) {
+    return { __type:"Pointer", className:klass, objectId:objectId };
+}
+
 // End Helper
 //------------------------------------------------------------
+
+Parse.Cloud.define("addAdmin", function(request, response) {    
+  var authorizedUser  = new Parse.Query("_User");
+  authorizedUser.limit(100);   
+  authorizedUser.equalTo("objectId", request.params.userId);
+  authorizedUser.find({
+    success: function(results) { 
+      var userType = _.map(results, function(result){  
+        if (result.get("userType") === undefined || userType === null) {        
+          return null;
+        }else{                
+          return result.get("userType").id;
+        }
+      });
+      if (userType != null){
+        if (userType[0] === adminObjectId && request.params.passcode === adminPasscode){
+         
+          var newAdminUser  = new Parse.Query("_User");          
+          newAdminUser.equalTo("username", request.params.email);
+          newAdminUser.find({
+            success: function(newAdmin) {                            
+              if (newAdmin.length > 0){                
+                newAdmin[0].set ("userType",pointerTo(adminObjectId,"UserType"));
+                newAdmin[0].save(null, { useMasterKey: true }).then(function(){
+                    console.log(newAdmin);
+                    response.success("Successful")},
+                  function(error){
+                    response.error("Can not assign "+ request.params.email + " as an Admin. Please contact BodyBookApps support team.")
+                  }
+                );
+                
+              }else{
+                response.error("We can not find the email in our system.");
+              }              
+            }
+          });                    
+        }else{
+          response.error("You are not authorized to assign a new Admin User.");
+        }
+      }else{
+        response.error("You are not authorized to assign a new Admin User.");
+      }
+      
+     },
+    error: function(error) {
+      response.error(error);
+    }                           
+        
+  });
+});
+
+
 
 Parse.Cloud.define("adminDashboard", function(request, response) {  
   // Parse.Cloud.run("patientEnrolled",{},{
@@ -32,7 +91,7 @@ Parse.Cloud.define("adminDashboard", function(request, response) {
         }
       });
       if (userType != null){
-        if (userType[0] === "layp6jnX7U"){
+        if (userType[0] === adminObjectId){
           userCount(function(userCountResults){
             noTreatment(function(noTreatmentResults){
               botoxTreatment(function(botoxTreatmentResults){             
@@ -55,18 +114,6 @@ Parse.Cloud.define("adminDashboard", function(request, response) {
     }                           
         
   });
-
-  // var promises = [];
-  // promises.push(userCount(function(result){}));
-  // promises.push(noTreatment(function(result){}));
-  // promises.push(botoxTreatment(function(result){}));
-  // promises.push(medicineTreatment(function(result){}));
-
-  // Parse.Promise.when(promises).then(function(results){    
-  //   response.success({"UserCount":results[0],"NoTreatment":results[1],"Botox":results[2],"Medicine":results[3]});                        
-  // },function(error){
-  //   response.error(error);  
-  // });
 });
 
 
