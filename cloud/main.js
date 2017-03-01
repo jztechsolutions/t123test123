@@ -32,31 +32,34 @@ Parse.Cloud.define("addAdmin", function(request, response) {
       });
       if (userType != null){
         if (userType[0] === adminObjectId && request.params.passcode === adminPasscode){
-         
-          var newAdminUser  = new Parse.Query("_User");          
-          newAdminUser.equalTo("username", request.params.email);
-          newAdminUser.find({
-            success: function(newAdmin) {                            
-              if (newAdmin.length > 0){                
-                newAdmin[0].set ("userType",pointerTo(adminObjectId,"UserType"));
-                newAdmin[0].save(null, { useMasterKey: true }).then(function(){
-                    console.log(newAdmin);
-                    response.success("Successful")},
-                  function(error){
-                    response.error("Can not assign "+ request.params.email + " as an Admin. Please contact BodyBookApps support team.")
-                  }
-                );
+          if (request.params.email) {
+            var newAdminUser  = new Parse.Query("_User");          
+            newAdminUser.equalTo("username", request.params.email);
+            newAdminUser.find({
+              success: function(newAdmin) {                            
+                if (newAdmin.length > 0){                
+                  newAdmin[0].set ("userType",pointerTo(adminObjectId,"UserType"));
+                  newAdmin[0].save(null, { useMasterKey: true }).then(function(){
+                      console.log(newAdmin);
+                      response.success("Successful")},
+                    function(error){
+                      response.error("Can not assign "+ request.params.email + " as an Admin. Please contact BodyBookApps support team.")
+                    }
+                  );
                 
-              }else{
-                response.error("We can not find the email in our system.");
-              }              
-            }
-          });                    
+                }else{
+                  response.error("We can not find the email in our system.");
+                }              
+              }
+            });
+          }else{
+            response.error("You are not authorized to assign a new Admin User.\n Ref:EE");
+          }                                       
         }else{
-          response.error("You are not authorized to assign a new Admin User.");
+          response.error("You are not authorized to assign a new Admin User.\n Ref:NAId/WP");
         }
       }else{
-        response.error("You are not authorized to assign a new Admin User.");
+        response.error("You are not authorized to assign a new Admin User.\n Ref:NA");
       }
       
      },
