@@ -9,11 +9,11 @@ if (!databaseUri) {
 }
 
 var api = new ParseServer({
-  databaseURI: databaseUri || 'mongodb://devteam:passw0rd@ds115738.mlab.com:15738/migraine_tracker',
+  databaseURI: databaseUri || 'mongodb://BodyBookApps_admin:B0dyb00kApps@ds023000.mlab.com:23000/curbside_consult',
   cloud: process.env.CLOUD_CODE_MAIN || './cloud/main.js',
-  appId: process.env.APP_ID || 'MigraineTracker',
+  appId: process.env.APP_ID || 'CurbsideConsult',
   masterKey: process.env.MASTER_KEY || 'G6ZtgCr3efVhtMCR7XTGhEFAOYcAycsGT3aWIcCv', //Add your master key here. Keep it secret!  
-  serverURL: process.env.SERVER_URL || 'https://bodybook-api.herokuapp.com/parse',//'http://localhost:1337/parse',  // Don't forget to change to https if needed
+  serverURL: process.env.SERVER_URL || 'https://curbsideconsult.herokuapp.com/parse',//'http://localhost:1337/parse',  // Don't forget to change to https if needed
  
   // Disable Anonymous Users 
   enableAnonymousUsers: false,
@@ -39,30 +39,30 @@ var api = new ParseServer({
   // The public URL of your app. 
   // This will appear in the link that is used to verify email addresses and reset passwords. 
   // Set the mount path as it is in serverURL 
-  publicServerURL: 'https://bodybook-api.herokuapp.com/parse', //'http://localhost:1337/parse',//
+  publicServerURL: 'https://curbsideconsult.herokuapp.com/parse', //'http://localhost:1337/parse',//
   // Your apps name. This will appear in the subject and body of the emails that are sent. 
-  appName: 'Migraine Tracker',
+  appName: 'Curbside Consult',
   // The email adapter 
   emailAdapter:{
     // module: 'parse-server-simple-mailgun-adapter',
     module: 'parse-server-mailgun',
     options: {
       // The address that your emails come from 
-      fromAddress: 'Migraine Tracker<no-reply-MigraineTracker@bodybookapps.com>',
+      fromAddress: 'Curbside Consult<no-reply-MigraineTracker@bodybookapps.com>',
       // Your domain from mailgun.com 
       domain: 'bodybookapps.com',
       // Your API key from mailgun.com 
       apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452',
       templates: {
         passwordResetEmail: {
-          subject: 'Password Reset Request for MigraineTracker',
+          subject: 'Password Reset Request for CurbsideConsult',
           pathPlainText: path.join(__dirname, '/public/email-templates/password_reset.txt'),
           pathHtml: path.join(__dirname, '/public/email-templates/password_reset.html'),
           callback: (user) => { return { email: user.get('email') }}
           // Now you can use {{firstName}} in your templates
         },
         verificationEmail: {
-          subject: 'Please verify your email for MigraineTracker',
+          subject: 'Please verify your email for CurbsideConsult',
           pathPlainText: path.join(__dirname, '/public/email-templates/verification.txt'),
           pathHtml: path.join(__dirname, '/public/email-templates/verification.html'),
           callback: (user) => { return { email: user.get('email') }}
