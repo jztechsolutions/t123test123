@@ -3,4 +3,4 @@ Hi {{username}},
 Thanks for using {{appName}}.
 
 Sincerely,
-The Migraine Tracker Team
+The {{appName}} Team

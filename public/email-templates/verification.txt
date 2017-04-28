@@ -1,6 +1,6 @@
 Dear {{username}},
 
-Thank you for signing up for Migraine Tracker mobile application.  
+Thank you for signing up for {{appName}} mobile application.  
 
 In order to access to all features of the application, please confirm your account by clicking the verify link below.
 
@@ -8,4 +8,4 @@ Verify now:
 {{link}}
 
 Sincerely,
-The Migraine Tracker Team
+The {{appName}} Team
