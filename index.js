@@ -73,10 +73,10 @@ var api = new ParseServer({
   },
 
   customPages: {
-    invalidLink: 'http://ezmobiletech.com/Users/invalid_link.html',
-    verifyEmailSuccess: 'http://ezmobiletech.com/Users/verify_email_success_redirect.html',
-    choosePassword: 'http://ezmobiletech.com/Users/choose_password.html',
-    passwordResetSuccess: 'http://ezmobiletech.com/Users/password_updated_redirect.html'
+    invalidLink: 'http://ezmobiletech.com/Users/CC/invalid_link.html',
+    verifyEmailSuccess: 'http://ezmobiletech.com/Users/CC/verify_email_success_redirect.html',
+    choosePassword: 'http://ezmobiletech.com/Users/CC/choose_password.html',
+    passwordResetSuccess: 'http://ezmobiletech.com/Users/CC/password_updated_redirect.html'
   },
  
   // account lockout policy setting (OPTIONAL) - defaults to undefined 
