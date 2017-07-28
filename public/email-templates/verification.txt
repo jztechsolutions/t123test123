@@ -2,7 +2,7 @@ Dear {{username}},
 
 Thank you for signing up for {{appName}} mobile application.  
 
-In order to access to all features of the application, please confirm your account by clicking the verify link below.
+In order to access to all features of the application, please confirm your email address by clicking the link below in order to access the App.
 
 Verify now:
 {{link}}
