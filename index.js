@@ -12,6 +12,7 @@ var api = new ParseServer({
   databaseURI: databaseUri || 'mongodb://BodyBookApps_admin:B0dyb00kApps@ds023000.mlab.com:23000/curbside_consult',
   cloud: process.env.CLOUD_CODE_MAIN || './cloud/main.js',
   appId: process.env.APP_ID || 'CurbsideConsult',
+  fileKey: process.env.FILE_KEY || 'AycsGT3aWIcCvG6G6ZtgCZtgCr3ef',
   masterKey: process.env.MASTER_KEY || 'CurbsideConsult-G6ZtgCr3efVhtMCR7XTGhEFAOYcAycsGT3aWIcCv', //Add your master key here. Keep it secret!  
   serverURL: process.env.SERVER_URL || 'https://curbsideconsult.herokuapp.com/parse',//'http://localhost:1337/parse',  // Don't forget to change to https if needed
  
