@@ -1,7 +1,7 @@
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
-var FileAdapter = require('parse-server-fs-adapter')
+var FSFilesAdapter = require('parse-server-fs-adapter');
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI;
 
@@ -103,7 +103,7 @@ var api = new ParseServer({
     // resetTokenValidityDuration: 24*60*60, // expire after 24 hours 
   },
 
-  fileAdapter: new FileAdapter({
+  fileAdapter: new FSFilesAdapter({
     filesSubDirectory: './CurbsideConsult'
   })
 });
