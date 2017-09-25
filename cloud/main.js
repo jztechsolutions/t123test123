@@ -24,10 +24,11 @@ Parse.Cloud.define('SendEmail', function(request, response) {
 });
 
 
-var Mailgun = require('mailgun');
-Mailgun.initialize('bodybookapps.com', 'key-77d43d079cb3f40d2c99d8da46a7c452');
+
 
 Parse.Cloud.define("sendEmail2", function(request, response) {
+  var Mailgun = require('mailgun');
+  Mailgun.initialize('bodybookapps.com', 'key-77d43d079cb3f40d2c99d8da46a7c452');
   Mailgun.sendEmail({
     to: "huy.johnny@gmail.com",
     from: "My Awesome Name <my@awesome.email>",
