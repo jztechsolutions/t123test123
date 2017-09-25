@@ -2,9 +2,9 @@ Parse.Cloud.define('Hello', function(request, response) {
   res.success('Hello from BodyBookApps Team');
 });
 
-Parse.Cloud.define("SendEmail", function(request, response) {
+Parse.Cloud.define('SendEmail', function(request, response) {
 
-  var mailgun = require('mailgun');
+  var mailgun = require('mailgun-js');
   mailgun.initialize('bodybookapps.com', 'key-77d43d079cb3f40d2c99d8da46a7c452');
   mailgun.sendEmail({
     to: "huy.johnny@gmail.com",
