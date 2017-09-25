@@ -11,7 +11,7 @@ Parse.Cloud.define('SendEmail', function(request, response) {
                 to: "huy.johnny@gmail.com",
                 subject: "Hello from Cloud Code!",
                 body: 'Using Parse and Mailgun is great!',
-                html: htmlBody
+                html: "<b>Hello<b>"
             };
 
   mailgun.messages().send(mail, function (sendError, body) {
