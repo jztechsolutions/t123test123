@@ -22,3 +22,25 @@ Parse.Cloud.define('SendEmail', function(request, response) {
     }            
   });
 });
+
+
+var Mailgun = require('mailgun');
+Mailgun.initialize('bodybookapps.com', 'key-77d43d079cb3f40d2c99d8da46a7c452');
+
+Parse.Cloud.define("sendEmail2", function(request, response) {
+  Mailgun.sendEmail({
+    to: "huy.johnny@gmail.com",
+    from: "My Awesome Name <my@awesome.email>",
+    subject: "Hello World!",
+    text: "Hello from Parse/Mailgun!\n\nIt's awesome!"
+  }, {
+    success: function(httpResponse) {
+      console.log(httpResponse);
+      response.success("Email sent!");
+    },
+    error: function(httpResponse) {
+      console.error(httpResponse);
+      response.error("Uh oh, something went wrong");
+    }
+  });
+});
