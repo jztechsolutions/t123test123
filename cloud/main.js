@@ -16,10 +16,8 @@ Parse.Cloud.define('SendEmail', function(request, response) {
 
   mailgun.messages().send(mail, function (sendError, body) {
     if (error) {
-      inspect(sendError, 'mailgun sendError');
       response.error("Uh oh, something went wrong");
     } else {
-      inspect(body, 'Successfully send RECEIPT email to "' + toEmail + '"');
       response.success("Email sent!");
     }            
   });
