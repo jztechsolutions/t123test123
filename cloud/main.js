@@ -1,5 +1,5 @@
 Parse.Cloud.define('Hello', function(request, response) {
-  request.success('Hello from BodyBookApps Team');
+  response.success('Hello from BodyBookApps Team');
 });
 
 Parse.Cloud.define('SendEmail', function(request, response) {
