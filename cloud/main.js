@@ -21,5 +21,3 @@ Parse.Cloud.define("SendEmail", function(request, response) {
        response.error("Uh oh, something went wrong");
     }
 });
-
-}
