@@ -114,7 +114,7 @@ Parse.Cloud.define("RemoveProfile", function(request, response){
     console.log("Valid..............................");
     var userId = request.user.id;
     
-    const currentUserQuery = new Parse.Query("_User");
+    const currentUserQuery = new Parse.Query("UserProfile");
         currentUserQuery.get(request.params.userProfileId)
           .then(function(user){
               Parse.Object.destroyAll(userProfile)
