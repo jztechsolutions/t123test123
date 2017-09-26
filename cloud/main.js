@@ -48,40 +48,41 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
   //Get userId who call this function from client side
   if (typeof request.user.id === "undefined") {
     response.error("Access Denied - Unauthorized");
-  }
-  var userId = request.user.id;
+  }else{
+    var userId = request.user.id;
 
-  //Create new profile object
-  let UserProfile = Parse.Object.extend("UserProfile");
-  var userProfile = new UserProfile();
-  userProfile.set("lastName",request.params.lastName);
-  userProfile.set("firstName",request.params.firstName);
-  userProfile.set("officePhone",request.params.officePhone);
-  userProfile.set("cellPhone",request.params.cellPhone);
-  userProfile.set("licenseNumb",request.params.licenseNumb);
-  userProfile.set("gender",request.params.gender);
-  userProfile.set("street",request.params.street);
-  userProfile.set("city",request.params.city);
-  userProfile.set("state",request.params.state);
-  userProfile.set("zip",request.params.zip);
-  userProfile.set("pri_spec",request.params.pri_spec);  
-  userProfile.set("med_sch",request.params.med_sch);
-  userProfile.set("grad_yr",request.params.grad_yr);
-  userProfile.addUnique("myNetworksObjId",request.params.myNetworksObjId);
+    //Create new profile object
+    let UserProfile = Parse.Object.extend("UserProfile");
+    var userProfile = new UserProfile();
+    userProfile.set("lastName",request.params.lastName);
+    userProfile.set("firstName",request.params.firstName);
+    userProfile.set("officePhone",request.params.officePhone);
+    userProfile.set("cellPhone",request.params.cellPhone);
+    userProfile.set("licenseNumb",request.params.licenseNumb);
+    userProfile.set("gender",request.params.gender);
+    userProfile.set("street",request.params.street);
+    userProfile.set("city",request.params.city);
+    userProfile.set("state",request.params.state);
+    userProfile.set("zip",request.params.zip);
+    userProfile.set("pri_spec",request.params.pri_spec);  
+    userProfile.set("med_sch",request.params.med_sch);
+    userProfile.set("grad_yr",request.params.grad_yr);
+    userProfile.addUnique("myNetworksObjId",request.params.myNetworksObjId);
 
-  userProfile.save(null, {
-    success: function(newProfile) {
-      // Execute any logic that should take place after the object is saved.
-      response.success(newProfile);
-      console.log("Start Logging..............................");
-      console.log(newProfile);    
-      // console.log(userProfile.id);    
-      console.log("End Logging..............................");
-    },
-    error: function(userProfile, error) {
-      // Execute any logic that should take place if the save fails.
-      // error is a Parse.Error with an error code and message.
-      response.error(error);
-    }
-  });
+    userProfile.save(null, {
+      success: function(newProfile) {
+        // Execute any logic that should take place after the object is saved.
+        response.success(newProfile);
+        console.log("Start Logging..............................");
+        console.log(newProfile);    
+        // console.log(userProfile.id);    
+        console.log("End Logging..............................");
+      },
+      error: function(userProfile, error) {
+        // Execute any logic that should take place if the save fails.
+        // error is a Parse.Error with an error code and message.
+        response.error(error);
+      }
+    });
+  }  
 });
