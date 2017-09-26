@@ -31,18 +31,15 @@ Parse.Cloud.afterSave("Invitation", function(request) {
     .then(function(result){
       console.log("Start Logging..............................");
       console.log(result.get("specialitySettings"));    
-      console.log(result);    
+      console.log(request.user.id);    
       console.log("End Logging..............................");
     })
     .catch(function(error){
       response.error(error);
     });    
-  // query.get(request.object.get("networking").id)
-  //   .then(function(post) {
-  //     post.increment("comments");
-  //     return post.save();
-  //   })
-  //   .catch(function(error) {
-  //     console.error("Got an error " + error.code + " : " + error.message);
-  //   });
+});
+
+
+Parse.Cloud.define("AddNewProfile", function(request, response){
+
 });
