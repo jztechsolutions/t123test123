@@ -47,8 +47,10 @@ Parse.Cloud.afterSave("Invitation", function(request) {
 Parse.Cloud.define("AddNewProfile", function(request, response){
   //Get userId who call this function from client side
   if (typeof request.user.id === "undefined") {
+    console.log("Invalid..............................");
     response.error("Access Denied - Unauthorized");
   }else{
+    console.log("Valid..............................");
     var userId = request.user.id;
 
     //Create new profile object
