@@ -51,15 +51,26 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
   //Create new profile object
   let UserProfile = Parse.Object.extend("UserProfile");
   var userProfile = new UserProfile();
-  userProfile.set("lastName","TestLast");
-  userProfile.set("firstName","TestFirst");
-  userProfile.set("zip","00000");
+  userProfile.set("lastName",request.params.lastName);
+  userProfile.set("firstName",request.params.firstName);
+  userProfile.set("officePhone",request.params.officePhone);
+  userProfile.set("cellPhone",request.params.cellPhone);
+  userProfile.set("licenseNumb",request.params.licenseNumb);
+  userProfile.set("gender",request.params.gender);
+  userProfile.set("street",request.params.street);
+  userProfile.set("city",request.params.city);
+  userProfile.set("state",request.params.state);
+  userProfile.set("zip",request.params.zip);
+  userProfile.set("pri_spec",request.params.pri_spec);  
+  userProfile.set("med_sch",request.params.med_sch);
+  userProfile.set("grad_yr",request.params.grad_yr);
+  userProfile.set("myNetworksObjId",request.params.myNetworksObjId);
 
   userProfile.save(null, {
-    success: function(album) {
+    success: function(newProfile) {
       // Execute any logic that should take place after the object is saved.
       console.log("Start Logging..............................");
-      console.log(album);    
+      console.log(newProfile);    
       // console.log(userProfile.id);    
       console.log("End Logging..............................");
     },
