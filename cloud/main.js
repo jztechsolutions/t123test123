@@ -73,12 +73,27 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
 
     userProfile.save(null, {
       success: function(newProfile) {
-        // Execute any logic that should take place after the object is saved.
-        response.success(newProfile);
-        console.log("Start Logging..............................");
-        console.log(newProfile);    
+        // ONNECT THE NEW PROFILE WITH USERNAME        
+        const currentUserQuery = new Parse.Query("_User");
+        currentUserQuery.get(userId)
+          .then(function(user){
+
+            response.success(user);
+
+          })
+          .catch(function(error){
+            //Delete the saved profile if can't connect with username
+            Parse.Object.destroyAll(userProfile)
+              .then(function(){
+                response.error(error);
+              })            
+          });        
+
+        // console.log("Start Logging..............................");
+        // console.log(newProfile);    
         // console.log(userProfile.id);    
-        console.log("End Logging..............................");
+        // console.log("End Logging..............................");
+
       },
       error: function(userProfile, error) {
         // Execute any logic that should take place if the save fails.
@@ -86,5 +101,30 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
         response.error(error);
       }
     });
+  }  
+});
+
+
+Parse.Cloud.define("RemoveProfile", function(request, response){
+  //Get userId who call this function from client side
+  if (!request.user) {
+    console.log("Invalid..............................");
+    response.error("Access Denied - Unauthorized");
+  }else{
+    console.log("Valid..............................");
+    var userId = request.user.id;
+    
+    const currentUserQuery = new Parse.Query("_User");
+        currentUserQuery.get(request.params.userProfileId)
+          .then(function(user){
+              Parse.Object.destroyAll(userProfile)
+              .then(function(){
+                response.success("Deleted");
+              })            
+
+          })
+          .catch(function(error){            
+            response.error(error);
+          });
   }  
 });
