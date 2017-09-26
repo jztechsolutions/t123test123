@@ -16,6 +16,7 @@ Parse.Cloud.define('SendEmail', function(request, response) {
 
   mailgun.messages().send(mail, function (sendError, body) {
     if (sendError) {
+      console.error(sendError);
       response.error("Uh oh, something went wrong");
     } else {
       response.success("Email sent!");
@@ -24,24 +25,15 @@ Parse.Cloud.define('SendEmail', function(request, response) {
 });
 
 
-
-
-Parse.Cloud.define("sendEmail2", function(request, response) {
-  var Mailgun = require('mailgun');
-  Mailgun.initialize('bodybookapps.com', 'key-77d43d079cb3f40d2c99d8da46a7c452');
-  Mailgun.sendEmail({
-    to: "huy.johnny@gmail.com",
-    from: "My Awesome Name <my@awesome.email>",
-    subject: "Hello World!",
-    text: "Hello from Parse/Mailgun!\n\nIt's awesome!"
-  }, {
-    success: function(httpResponse) {
-      console.log(httpResponse);
-      response.success("Email sent!");
-    },
-    error: function(httpResponse) {
-      console.error(httpResponse);
-      response.error("Uh oh, something went wrong");
-    }
-  });
+Parse.Cloud.afterSave("Invitation", function(request) {
+  const query = new Parse.Query("Networking");
+  console.log(request.object.get("networking").id)
+  // query.get(request.object.get("networking").id)
+  //   .then(function(post) {
+  //     post.increment("comments");
+  //     return post.save();
+  //   })
+  //   .catch(function(error) {
+  //     console.error("Got an error " + error.code + " : " + error.message);
+  //   });
 });
