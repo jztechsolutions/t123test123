@@ -31,7 +31,8 @@ Parse.Cloud.afterSave("Invitation", function(request) {
   query.find({
     success: function(result){
       console.log("Start Logging..............................");
-      console.log(result.get("specialitySettings"));    
+      console.log(result);    
+      console.log("End Logging..............................");
     },
     error: function (error) {
       response.error(error);
