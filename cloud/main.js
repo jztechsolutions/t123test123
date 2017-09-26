@@ -27,12 +27,14 @@ Parse.Cloud.define('SendEmail', function(request, response) {
 
 Parse.Cloud.afterSave("Invitation", function(request) {
   var query = new Parse.Query("Networking");
+  console.log("Start Logging..............................");
+      // console.log(result.get("specialitySettings"));    
+      console.log(request.user.id);    
+      console.log("End Logging..............................");
+
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
-      console.log("Start Logging..............................");
-      console.log(result.get("specialitySettings"));    
-      console.log(request.user);    
-      console.log("End Logging..............................");
+      
     })
     .catch(function(error){
       response.error(error);
