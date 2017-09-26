@@ -28,9 +28,9 @@ Parse.Cloud.define('SendEmail', function(request, response) {
 Parse.Cloud.afterSave("Invitation", function(request) {
   var query = new Parse.Query("Networking");
   console.log("Start Logging..............................");
-      // console.log(result.get("specialitySettings"));    
-      console.log(request.user.id);    
-      console.log("End Logging..............................");
+  // console.log(result.get("specialitySettings"));    
+  console.log(request.user.id);    
+  console.log("End Logging..............................");
 
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
@@ -42,6 +42,31 @@ Parse.Cloud.afterSave("Invitation", function(request) {
 });
 
 
+// ADD NEW PROFILE THEN CONNECT THE NEW PROFILE WITH USERNAME
+// AFTER ADDING, CHECK THE FLAG IF THIS NEW USER CREATING NEW GROUP OR JOINING AN EXISTING GROUP
 Parse.Cloud.define("AddNewProfile", function(request, response){
+  //Get userId who call this function from client side
+  var userId = request.user.id;
 
+  //Create new profile object
+  let UserProfile = Parse.Object.extend("UserProfile");
+  var userProfile = new UserProfile();
+  userProfile.set("lastName","TestLast");
+  userProfile.set("firstName","TestFirst");
+  userProfile.set("zip","00000");
+
+  userProfile.save(null, {
+    success: function(album) {
+      // Execute any logic that should take place after the object is saved.
+      console.log("Start Logging..............................");
+      console.log(album);    
+      console.log(UserProfile.id);    
+      console.log("End Logging..............................");
+    },
+    error: function(userProfile, error) {
+      // Execute any logic that should take place if the save fails.
+      // error is a Parse.Error with an error code and message.
+      response.error(error);
+    }
+  });
 });
