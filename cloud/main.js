@@ -77,16 +77,18 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
         const currentUserQuery = new Parse.Query("_User");
         currentUserQuery.get(userId)
           .then(function(user){
-
-            response.success(user);
-
+            user.set("userProfileObjId", newProfile);
+            return user.save();
           })
           .catch(function(error){
             //Delete the saved profile if can't connect with username
-            Parse.Object.destroyAll(userProfile)
+            Parse.Object.destroyAll(newProfile)
               .then(function(){
                 response.error(error);
-              })            
+              })    
+              .catch(function(error){            
+                response.error(error);
+              });        
           });        
 
         // console.log("Start Logging..............................");
@@ -105,7 +107,7 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
 });
 
 
-Parse.Cloud.define("RemoveProfile", function(request, response){
+Parse.Cloud.define("RemoveProfileXXX", function(request, response){
   //Get userId who call this function from client side
   if (!request.user) {
     console.log("Invalid..............................");
