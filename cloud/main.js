@@ -69,6 +69,7 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
   userProfile.save(null, {
     success: function(newProfile) {
       // Execute any logic that should take place after the object is saved.
+      response.success(newProfile);
       console.log("Start Logging..............................");
       console.log(newProfile);    
       // console.log(userProfile.id);    
