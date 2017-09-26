@@ -26,9 +26,17 @@ Parse.Cloud.define('SendEmail', function(request, response) {
 
 
 Parse.Cloud.afterSave("Invitation", function(request) {
-  const query = new Parse.Query("Networking");
-  console.log("Start Logging..............................");
-  console.log(request.object.get("networkObjId").id);
+  var query = new Parse.Query("Networking");
+  query.equalTo("objectId", request.object.get("networkObjId").id)  
+  query.find({
+    success: function(result){
+      console.log("Start Logging..............................");
+      console.log(result.get("specialitySettings"));    
+    },
+    error: function (error) {
+      response.error(error);
+    }
+  })
   // query.get(request.object.get("networking").id)
   //   .then(function(post) {
   //     post.increment("comments");
