@@ -30,7 +30,7 @@ Parse.Cloud.afterSave("Invitation", function(request) {
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
       console.log("Start Logging..............................");
-      console.log(result.get("networkSize"));    
+      console.log(result.get("specialitySettings"));    
       console.log(result);    
       console.log("End Logging..............................");
     })
