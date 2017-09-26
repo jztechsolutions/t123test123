@@ -60,7 +60,7 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
       // Execute any logic that should take place after the object is saved.
       console.log("Start Logging..............................");
       console.log(album);    
-      console.log(userProfile.id);    
+      // console.log(userProfile.id);    
       console.log("End Logging..............................");
     },
     error: function(userProfile, error) {
