@@ -78,7 +78,14 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
         currentUserQuery.get(userId)
           .then(function(user){
             user.set("userProfileObjId", newProfile);
-            return user.save();
+            user.save(null, {
+              success: function() {
+                response.success(user);
+              },
+              error: function(userProfile, error) {                  
+                response.error(error);
+              }
+            });
           })
           .catch(function(error){
             //Delete the saved profile if can't connect with username
