@@ -46,6 +46,9 @@ Parse.Cloud.afterSave("Invitation", function(request) {
 // AFTER ADDING, CHECK THE FLAG IF THIS NEW USER CREATING NEW GROUP OR JOINING AN EXISTING GROUP
 Parse.Cloud.define("AddNewProfile", function(request, response){
   //Get userId who call this function from client side
+  if (typeof request.user.id === "undefined") {
+    response.error("Access Denied - Unauthorized");
+  }
   var userId = request.user.id;
 
   //Create new profile object
