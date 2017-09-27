@@ -77,11 +77,9 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
         currentUserQuery.get(userId)
           .then(function(user){
             user.set("userProfileObjId", newProfile);
-            return user.save(null, {useMasterKey: true});            
-          })
-          .then(function(connectedUser){              
-            return response.success({"UserId":user.id,"UserProfileId":newProfile.id});
-          })
+            user.save(null, {useMasterKey: true});            
+            response.success({"UserId":user.id,"UserProfileId":newProfile.id});
+          })          
           .catch(function(error){
             //Delete the saved profile if can't connect with username
             Parse.Object.destroyAll(newProfile)
