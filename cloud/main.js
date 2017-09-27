@@ -86,7 +86,7 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
             //Delete the saved profile if can't connect with username
             Parse.Object.destroyAll(newProfile)
               .then(function(){
-                response.error(error);
+                response.error("Internal Error");
               })    
               .catch(function(error){            
                 response.error(error);
@@ -134,4 +134,39 @@ Parse.Cloud.define("RemoveProfileXXX", function(request, response){
             response.error(error);
           });
   }  
+});
+
+
+
+Parse.Cloud.define('DestroyUserSessions', function(req, res) {
+    //the user that sends the request
+    var currentUser = req.user;
+    //send from client 
+    var currentUserInstallationId = req.param.installationId;
+    var Session = Parse.Object.extend('Session');
+    var userSessionQuery = new Parse.Query(Session);
+    //all sessions of this user
+    userSessionQuery.equalTo('user', currentUser);
+    //except the session for this installation -> to not log the request performing user out
+    userSessionQuery.notEqualTo('installationId', currentUserInstallationId);
+
+    userSessionQuery.find({
+        success: function(userSessionsToBeRevoked) {
+            Parse.Object.destroyAll(userSessionsToBeRevoked, {
+                success: function() {
+                    //you have deleted all sessions except the one for the current installation
+                    var installationIds = userSessionsToBeRevoked.map(function(session) {
+                        return session.installationId;
+                    }); 
+                    //you can use the installation Ids to send push notifications to installations that are now logged out
+                },
+                error: function(err) {
+                    //TODO: Handle error
+                }
+            });
+        }, 
+        error: function(err) {
+            //TODO: Handle error
+        }
+    });
 });
