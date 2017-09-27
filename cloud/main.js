@@ -86,7 +86,7 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
             //Delete the saved profile if can't connect with username
             Parse.Object.destroyAll(newProfile)
               .then(function(){
-                response.error("Internal Error");
+                response.error(error);
               })    
               .catch(function(error){            
                 response.error(error);
