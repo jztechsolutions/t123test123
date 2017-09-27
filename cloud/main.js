@@ -46,11 +46,10 @@ Parse.Cloud.afterSave("Invitation", function(request) {
 // AFTER ADDING, CHECK THE FLAG IF THIS NEW USER CREATING NEW GROUP OR JOINING AN EXISTING GROUP
 Parse.Cloud.define("AddNewProfile", function(request, response){
   //Get userId who call this function from client side
-  if (!request.user) {
-    console.log("Invalid..............................");
+  if (!request.user) {    
     response.error("Access Denied - Unauthorized");
   }else{
-    console.log("Valid..............................");
+    
     var userId = request.user.id;
 
     //Create new profile object
@@ -80,6 +79,7 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
             user.set("userProfileObjId", newProfile);
             user.save(null, {useMasterKey: true}, {
               success: function() {
+                console.log("Valid..............................");
                 response.success({"UserId":user.id,"UserProfileId":newProfile.id});
               },
               error: function(error){
