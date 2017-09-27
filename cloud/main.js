@@ -76,15 +76,13 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
         const currentUserQuery = new Parse.Query("_User");
         currentUserQuery.get(userId)
           .then(function(user){
-            console.log("Start Logging..............................");
-            user.set("userProfileObjI", newProfile);
-            user.save(null, {useMasterKey: true})                      
+            user.set("userProfileObjId", newProfil);
+            return user.save(null, {useMasterKey: true});            
           })
           .then(function(connectedUser){              
-              response.success({"UserId":user.id,"UserProfileId":newProfile.id});
-            })
+            response.success({"UserId":user.id,"UserProfileId":newProfile.id});
+          })
           .catch(function(error){
-            console.log("Catch..............................");
             //Delete the saved profile if can't connect with username
             Parse.Object.destroyAll(newProfile)
               .then(function(){
@@ -95,11 +93,6 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
               });        
           });        
 
-        // console.log("Start Logging..............................");
-        // console.log(newProfile);    
-        // console.log(userProfile.id);    
-        // console.log("End Logging..............................");
-
       },
       error: function(userProfile, error) {
         // Execute any logic that should take place if the save fails.
@@ -109,6 +102,11 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
     });
   }  
 });
+
+        // console.log("Start Logging..............................");
+        // console.log(newProfile);    
+        // console.log(userProfile.id);    
+        // console.log("End Logging..............................");
 
 
 Parse.Cloud.define("RemoveProfileXXX", function(request, response){
