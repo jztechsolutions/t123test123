@@ -7,11 +7,11 @@ Parse.Cloud.define('SendEmail', function(request, response) {
   var mailgun = require('mailgun-js')({apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452', domain: 'bodybookapps.com'});
   
   var mail = {
-                from: 'Mailgun@CloudCode.com',
+                from: 'CurbsideConsult@bodybookapps.com',
                 to: "huy.johnny@gmail.com",
-                subject: "Hello from Cloud Code!",
-                body: 'Using Parse and Mailgun is great!',
-                html: "<b>Hello<b>"
+                subject: "Your friend invite you to join Curbside Consult",
+                body: 'Download the app here ',
+                html: "Click <a href=\"https://goo.gl/qYcjsh\">here</a> to download Curbside Consult iPhone App."
             };
 
   mailgun.messages().send(mail, function (sendError, body) {
@@ -26,15 +26,16 @@ Parse.Cloud.define('SendEmail', function(request, response) {
 
 
 Parse.Cloud.afterSave("Invitation", function(request) {
-  var query = new Parse.Query("Networking");
-  console.log("Start Logging..............................");
-  // console.log(result.get("specialitySettings"));    
-  console.log(request.user.id);    
-  console.log("End Logging..............................");
-
+  
+  // console.log("Start Logging..............................");
+  // // console.log(result.get("specialitySettings"));    
+  // console.log(request.user.id);    
+  // console.log("End Logging..............................");
+var query = new Parse.Query("Networking");
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
-      
+      //update pending count for the speciality in the group.
+
     })
     .catch(function(error){
       response.error(error);
@@ -79,7 +80,7 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
             user.set("userProfileObjId", newProfile);
             user.save(null, {useMasterKey: true});            
             response.success({"UserId":user.id,"UserProfileId":newProfile.id});
-          })          
+          }          
           .catch(function(error){
             //Delete the saved profile if can't connect with username
             Parse.Object.destroyAll(newProfile)
