@@ -1,6 +1,7 @@
 //Variables
-// var path = require('path');
-// path.join(__dirname, '/public/email-templates/invitation_email.html')
+var invitationSender = "";
+var invitationReciever = "";
+
 
 //Functions
 Parse.Cloud.define('Hello', function(request, response) {
@@ -11,6 +12,10 @@ Parse.Cloud.define('SendEmail', function(request, response) {
 
   var mailgun = require('mailgun-js')({apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452', domain: 'bodybookapps.com'});
   
+  invitationReciever = "Huy Hoang";
+  invitationSender   = "Purna Movva"
+
+
   var mail = {
                 from: "CurbsideConsult@bodybookapps.com",
                 to: "huy.johnny@gmail.com",
@@ -244,7 +249,7 @@ var invitationEmail = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional
 '				<table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action" itemscope itemtype="http://schema.org/ConfirmAction" style="background-color: #fff"><tr><td class="content-wrap" style="box-sizing: border-box; vertical-align: top; margin: 0; padding: 20px;" valign="top">'+
 '							<meta itemprop="name" content="Confirm Email" /><table width="100%" cellpadding="0" cellspacing="0" ><tr>'+
 '                                <td class="content-block">'+
-'                    Dear {{username}},<br/><br/>I would like to invite to join my network at Curbside Consult.'+
+'                    Dear '+invitationReciever+',<br/><br/>I would like to invite to join my network at Curbside Consult.'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
 '										As you might know, the curbside consult has been an age-old practice to share wisdom in healthcare. With Curbside Consult iPhone App, you can get virtual curbsides anywhere and anytime.<br/><br/>'+
@@ -256,7 +261,7 @@ var invitationEmail = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional
 '										<a href="https://goo.gl/qYcjsh" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Dowloading CurbsideConsult Now</a><br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block">'+
-'                    Sincerely,<br/>{{senderName}}'+
+'                    Sincerely,<br/>'+invitationReciever+
 '									</td>'+
 '								</tr></table></td>'+
 '					</tr></table><div class="footer" >'+
