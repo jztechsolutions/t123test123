@@ -259,10 +259,16 @@ var invitationEmail = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional
 '										You can start by dowloading the app today and explore it.<br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										<a href="https://goo.gl/qYcjsh" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Dowloading CurbsideConsult Now</a><br/><br/>'+
+'										<a href="https://goo.gl/qYcjsh" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Dowloading CurbsideConsult</a><br/><br/>'+
+'									</td>'+
+'								</tr><tr><td class="content-block" >'+
+'										Here is my network link. You can click here to connect me after sign up.<br/><br/>'+
+'									</td>'+
+'								</tr><tr><td class="content-block" >'+
+'										<a href="CurbsideConsult://" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with invitationSender</a><br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block">'+
-'                    Sincerely,<br/>invitationReciever'
+'                    Sincerely,<br/>invitationSender'
 '									</td>'+
 '								</tr></table></td>'+
 '					</tr></table><div class="footer" >'+
