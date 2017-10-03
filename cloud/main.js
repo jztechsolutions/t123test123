@@ -1,6 +1,4 @@
 //Variables
-var invitationSender = "";
-var invitationReciever = "";
 
 
 //Functions
@@ -11,18 +9,13 @@ Parse.Cloud.define('Hello', function(request, response) {
 Parse.Cloud.define('SendEmail', function(request, response) {
 
   var mailgun = require('mailgun-js')({apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452', domain: 'bodybookapps.com'});
-  
-  invitationReciever = "Huy Hoang";
-  invitationSender   = "Purna Movva"
-  var html1 = invitationEmail.replace("invitationReciever",invitationReciever)
-  var finalHtml = html1.replace("invitationSender",invitationSender)
 
   var mail = {
                 from: "CurbsideConsult@bodybookapps.com",
                 to: "huy.johnny@gmail.com",
                 subject: "I would like to invite you to join my network at CurbsideDR.",
                 body: 'Hello',
-                html: finalHtml
+                html: generateInvitationEmail("Johnny","Purna")
             };
 
   mailgun.messages().send(mail, function (sendError, body) {
@@ -186,9 +179,11 @@ Parse.Cloud.define('DestroyUserSessions', function(req, res) {
 
 
 // Email template
+function generateInvitationEmail() {
+    var reciver = arguments[0];
+    var sender  = arguments[1];
 
-
-var invitationEmail = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'+
+    var invitationEmail = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'+
 '<html xmlns="http://www.w3.org/1999/xhtml" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">'+
 '<head>'+
 '<meta name="viewport" content="width=device-width" />'+
@@ -250,25 +245,25 @@ var invitationEmail = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional
 '				<table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action" itemscope itemtype="http://schema.org/ConfirmAction" style="background-color: #fff"><tr><td class="content-wrap" style="box-sizing: border-box; vertical-align: top; margin: 0; padding: 20px;" valign="top">'+
 '							<meta itemprop="name" content="Confirm Email" /><table width="100%" cellpadding="0" cellspacing="0" ><tr>'+
 '                                <td class="content-block">'+
-'                    Dear invitationReciever,<br/><br/>I would like to invite to join my network at Curbside Consult.'+
+'                    Dear '+reciver+',<br/><br/>I would like to invite to join my network at Curbside Consult.'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
 '										As you might know, the curbside consult has been an age-old practice to share wisdom in healthcare. With Curbside Consult iPhone App, you can get virtual curbsides anywhere and anytime.<br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										You can start by dowloading the app today and explore it.<br/><br/>'+
+'										You can start by dowloading the app today and explore it.<br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										<a href="https://goo.gl/qYcjsh" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Dowloading CurbsideConsult</a><br/><br/>'+
+'										<a href="https://goo.gl/qYcjsh" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Downloading CurbsideConsult</a><br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										Here is my network link. You can click here to connect me after sign up.<br/><br/>'+
+'										Here is direct link to connect with my network. Note: You can click here after download the app and sign up.<<br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										<a href="CurbsideConsult://" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with invitationSender</a><br/><br/>'+
+'										<a href="CurbsideConsult://" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block">'+
-'                    Sincerely,<br/>invitationSender'
+'                    Sincerely,<br/>'+sender
 '									</td>'+
 '								</tr></table></td>'+
 '					</tr></table><div class="footer" >'+
@@ -277,4 +272,9 @@ var invitationEmail = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional
 '		</td>		'+
 '	</tr></table></body>'+
 '</html>';
+
+
+    
+    return invitationEmail;
+}
 	
