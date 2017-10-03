@@ -10,12 +10,14 @@ Parse.Cloud.define('SendEmail', function(request, response) {
 
   var mailgun = require('mailgun-js')({apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452', domain: 'bodybookapps.com'});
 
+  var invitationTemplate = generateInvitationEmail("Johnny","Purna");
+
   var mail = {
                 from: "CurbsideConsult@bodybookapps.com",
                 to: "huy.johnny@gmail.com",
                 subject: "I would like to invite you to join my network at CurbsideDR.",
                 body: 'Hello',
-                html: generateInvitationEmail("Johnny","Purna")
+                html: invitationTemplate
             };
 
   mailgun.messages().send(mail, function (sendError, body) {
