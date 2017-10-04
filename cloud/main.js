@@ -54,16 +54,14 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
   // console.log(request.user.id);    
   // console.log("End Logging..............................");
   // console.log(specKey);
-  //     console.log(result.get("specialitySetting"));
-  //     console.log(settingDict["pending"]);
-Parse.Cloud.afterSave("Invitation", function(request) {
-  // Send Email out
-  sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));
+  // console.log(result.get("specialitySetting"));
+  // console.log(settingDict["pending"]);
+  // console.log(result.get("specialitySetting"));
+Parse.Cloud.beforeSave("Invitation", function(request) {  
   var query = new Parse.Query("Networking");
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
-      //update pending count for the speciality in the group.
-      console.log(result.get("specialitySetting"));
+      //update pending count for the speciality in the group.      
       var specKey     = request.object.get("speciality"); 
       var settingDict = result.get("specialitySetting")[specKey];
 
@@ -72,14 +70,27 @@ Parse.Cloud.afterSave("Invitation", function(request) {
       }else{
         settingDict["pending"] = 1;
       }
-      
-      result.get("specialitySetting")[specKey]= settingDict;
-      console.log("End Logging..............................");
-      console.log(result.get("specialitySetting"));
-
+      if (settingDict["pending"] > (settingDict["total"]-settingDict["taken"])){
+        console.log("Logging.............EXCEEDED................");
+        response.error("Number of user in "+specKey+ "has been exceeded. Please increase or choose different speciality to add friend.");
+      }else{
+        
+        result.get("specialitySetting")[specKey]= settingDict;   
+        result.save(null, {
+          success: function() {              
+            console.log("Logging............SAVED...............");
+            response.success();            
+          },
+          error: function(userProfile, error) {
+            console.log("Logging............FAIL TO SAVE...............");
+            response.error(error);
+          }
+        });
+        
+      }
     })
     .catch(function(error){
-      console.error(error);
+      response.error(error);      
     });    
 });
 
@@ -114,7 +125,7 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
 
     userProfile.save(null, {
       success: function(newProfile) {
-        // ONNECT THE NEW PROFILE WITH USERNAME        
+        // CONNECT THE NEW PROFILE WITH USERNAME        
         const currentUserQuery = new Parse.Query("_User");
         currentUserQuery.get(userId)
           .then(function(user){
