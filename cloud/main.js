@@ -25,28 +25,26 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo)
         invitationSubject  = "I'd like to invite you to join my Curbside Consult network.";
         invitationTemplate = generateInvitationEmailNewUser(recieverName,senderName);
       }
+      var mail = {
+        from: "CurbsideConsult@bodybookapps.com",
+        to: emailSendTo,
+        subject: invitationSubject,
+        body: "Invitation",
+        html: invitationTemplate
+      };
+
+      mailgun.messages().send(mail, function (sendError, body) {
+        if (sendError) {
+          console.error(sendError);
+          // response.error("Uh oh, something went wrong");
+        }            
+      });
+
     },
     error: function(err) {      
       
       console.error(err)
     }
-  });
-
-  
-
-  var mail = {
-                from: "CurbsideConsult@bodybookapps.com",
-                to: emailSendTo,
-                subject: invitationSubject,
-                body: "Invitation",
-                html: invitationTemplate
-            };
-
-  mailgun.messages().send(mail, function (sendError, body) {
-    if (sendError) {
-      console.error(sendError);
-      // response.error("Uh oh, something went wrong");
-    }            
   });
 }
 
