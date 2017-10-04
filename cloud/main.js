@@ -24,9 +24,9 @@ function sendInvitationEmail(senderName,reciverName,emailSendTo)
   mailgun.messages().send(mail, function (sendError, body) {
     if (sendError) {
       console.error(sendError);
-      response.error("Uh oh, something went wrong");
+      // response.error("Uh oh, something went wrong");
     } else {
-      response.success("Email sent!");
+      console.success("Email sent!");
     }            
   });
 }
