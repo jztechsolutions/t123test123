@@ -6,17 +6,18 @@ Parse.Cloud.define('Hello', function(request, response) {
   response.success('Hello from BodyBookApps Team');
 });
 
-Parse.Cloud.define('SendEmail', function(request, response) {
-
+// Parse.Cloud.define('SendEmail', function(request, response) {
+function sendInvitationEmail(senderName,reciverName,emailSendTo)
+{
   var mailgun = require('mailgun-js')({apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452', domain: 'bodybookapps.com'});
 
-  var invitationTemplate = generateInvitationEmail("Johnny","Purna");
+  var invitationTemplate = generateInvitationEmail(reciverName,senderName);
 
   var mail = {
                 from: "CurbsideConsult@bodybookapps.com",
-                to: "huy.johnny@gmail.com",
-                subject: "I would like to invite you to join my network at CurbsideDR.",
-                body: 'Hello',
+                to: emailSendTo,
+                subject: "I would like to invite you to join my network at Curbside Consult.",
+                body: '',
                 html: invitationTemplate
             };
 
@@ -28,15 +29,16 @@ Parse.Cloud.define('SendEmail', function(request, response) {
       response.success("Email sent!");
     }            
   });
-});
+}
 
 
 Parse.Cloud.afterSave("Invitation", function(request) {
-  
-  // console.log("Start Logging..............................");
-  // console.log(result.get("specialitySettings"));    
+  //Send Email out
+  sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"));
+  console.log("Start Logging..............................");
+  console.log(request.object.get("email"));    
   // console.log(request.user.id);    
-  // console.log("End Logging..............................");
+  console.log("End Logging..............................");
   var query = new Parse.Query("Networking");
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
@@ -265,7 +267,7 @@ function generateInvitationEmail() {
 '										<a href="CurbsideConsult://" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block">'+
-'                    Sincerely,<br/>'+sender
+'                    Sincerely,<br/>'+sender+
 '									</td>'+
 '								</tr></table></td>'+
 '					</tr></table><div class="footer" >'+
