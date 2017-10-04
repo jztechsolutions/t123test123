@@ -7,7 +7,7 @@ Parse.Cloud.define('Hello', function(request, response) {
 });
 
 // Parse.Cloud.define('SendEmail', function(request, response) {
-function sendInvitationEmail(senderName,recieverName,emailSendTo)
+function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
 {
   var mailgun = require('mailgun-js')({apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452', domain: 'bodybookapps.com'});
   
@@ -20,10 +20,10 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo)
     success: function(userCount) {
       if (userCount > 0){
         invitationSubject  = recieverName + ", please join my Curbside Consult network.";
-        invitationTemplate = generateInvitationEmailExistingUser(recieverName,senderName);
+        invitationTemplate = generateInvitationEmailExistingUser(recieverName,senderName,token);
       }else{
         invitationSubject  = "I'd like to invite you to join my Curbside Consult network.";
-        invitationTemplate = generateInvitationEmailNewUser(recieverName,senderName);
+        invitationTemplate = generateInvitationEmailNewUser(recieverName,senderName,token);
       }
       var mail = {
         from: "CurbsideConsult@bodybookapps.com",
@@ -49,13 +49,13 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo)
 }
 
 
-Parse.Cloud.afterSave("Invitation", function(request) {
-  // Send Email out
-  sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"));
   // console.log("Start Logging..............................");
   // console.log(request.object.get("email"));    
   // console.log(request.user.id);    
   // console.log("End Logging..............................");
+Parse.Cloud.afterSave("Invitation", function(request) {
+  // Send Email out
+  sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));
   var query = new Parse.Query("Networking");
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
@@ -203,7 +203,8 @@ Parse.Cloud.define('DestroyUserSessions', function(req, res) {
 // Email template
 function generateInvitationEmailNewUser() {
     var reciever = arguments[0];
-    var sender  = arguments[1];
+    var sender   = arguments[1];
+    var token    = arguments[2];
 
     var invitationEmail = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'+
 '<html xmlns="http://www.w3.org/1999/xhtml" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">'+
@@ -282,7 +283,7 @@ function generateInvitationEmailNewUser() {
 '										Here is direct link to connect with my network. Note: You can click here after download the app and sign up.<br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										<a href="CurbsideConsult://" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
+'										<a href="CurbsideConsult://invitationCode='+token+'" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block">'+
 '                    Sincerely,<br/>'+sender+
@@ -302,7 +303,8 @@ function generateInvitationEmailNewUser() {
 	
 function generateInvitationEmailExistingUser() {
     var reciever = arguments[0];
-    var sender  = arguments[1];
+    var sender   = arguments[1];
+    var token    = arguments[2];
 
     var invitationEmail = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'+
 '<html xmlns="http://www.w3.org/1999/xhtml" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">'+
@@ -366,10 +368,10 @@ function generateInvitationEmailExistingUser() {
 '				<table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action" itemscope itemtype="http://schema.org/ConfirmAction" style="background-color: #fff"><tr><td class="content-wrap" style="box-sizing: border-box; vertical-align: top; margin: 0; padding: 20px;" valign="top">'+
 '							<meta itemprop="name" content="Confirm Email" /><table width="100%" cellpadding="0" cellspacing="0" ><tr>'+
 '                                <td class="content-block">'+
-'                    Hi '+reciever+',<br/><br/>I would like to invite to join my network at Curbside Consult.'+
+'                    Hi '+reciever+',<br/><br/>I would like to invite to join my network at Curbside Consult.<br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										<a href="CurbsideConsult://" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
+'										<a href="CurbsideConsult://invitationCode='+token+'" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block">'+
 '                    Sincerely,<br/>'+sender+
