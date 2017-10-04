@@ -60,7 +60,7 @@ Parse.Cloud.afterSave("Invitation", function(request) {
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
       //update pending count for the speciality in the group.
-      console.log(request.get("speciality"))
+      console.log(request.object.get("speciality"))
       console.log(result.get("specialitySetting"))
     })
     .catch(function(error){
