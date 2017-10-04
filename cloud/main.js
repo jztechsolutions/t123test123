@@ -33,12 +33,12 @@ function sendInvitationEmail(senderName,reciverName,emailSendTo)
 
 
 Parse.Cloud.afterSave("Invitation", function(request) {
-  //Send Email out
-  // sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"));
-  console.log("Start Logging..............................");
+  // Send Email out
+  sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"));
+  // console.log("Start Logging..............................");
   // console.log(request.object.get("email"));    
   // console.log(request.user.id);    
-  console.log("End Logging..............................");
+  // console.log("End Logging..............................");
   var query = new Parse.Query("Networking");
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
