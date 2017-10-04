@@ -11,18 +11,19 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo)
 {
   var mailgun = require('mailgun-js')({apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452', domain: 'bodybookapps.com'});
   
+  var invitationSubject  = "";
+  var invitationTemplate = "";
+
   var userQuery = new Parse.Query(Parse.User);  
   userQuery.equalTo('email', emailSendTo);
   userQuery.count({
     success: function(userCount) {
       if (userCount > 0){
-        console.log("Start Logging..............................");
-        console.log("userRegister "+emailSendTo+userRegistered)
-        console.log("End Logging..............................");
+        invitationSubject  = recieverName + ", please join my Curbside Consult network.";
+        invitationTemplate = generateInvitationEmailExistingUser(recieverName,senderName);
       }else{
-        console.log("Start Logging NOT..............................");
-        console.log("NOTuserRegister" + emailSendTo+userRegistered)
-        console.log("End Logging NOT..............................");
+        invitationSubject  = "I'd like to invite you to join my Curbside Consult network.";
+        invitationTemplate = generateInvitationEmailNewUser(recieverName,senderName);
       }
     },
     error: function(err) {      
@@ -31,12 +32,12 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo)
     }
   });
 
-  var invitationTemplate = generateInvitationEmailNewUser(recieverName,senderName);
+  
 
   var mail = {
                 from: "CurbsideConsult@bodybookapps.com",
                 to: emailSendTo,
-                subject: "I would like to invite you to join my network at Curbside Consult.",
+                subject: invitationSubject,
                 body: "Invitation",
                 html: invitationTemplate
             };
@@ -367,19 +368,7 @@ function generateInvitationEmailExistingUser() {
 '				<table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action" itemscope itemtype="http://schema.org/ConfirmAction" style="background-color: #fff"><tr><td class="content-wrap" style="box-sizing: border-box; vertical-align: top; margin: 0; padding: 20px;" valign="top">'+
 '							<meta itemprop="name" content="Confirm Email" /><table width="100%" cellpadding="0" cellspacing="0" ><tr>'+
 '                                <td class="content-block">'+
-'                    Dear '+reciever+',<br/><br/>I would like to invite to join my network at Curbside Consult.'+
-'									</td>'+
-'								</tr><tr><td class="content-block" >'+
-'										As you might know, the curbside consult has been an age-old practice to share wisdom in healthcare. With Curbside Consult iPhone App, you can get virtual curbsides anywhere and anytime.<br/><br/>'+
-'									</td>'+
-'								</tr><tr><td class="content-block" >'+
-'										You can start by dowloading the app today and explore it.<br/>'+
-'									</td>'+
-'								</tr><tr><td class="content-block" >'+
-'										<a href="https://goo.gl/qYcjsh" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Downloading CurbsideConsult</a><br/><br/>'+
-'									</td>'+
-'								</tr><tr><td class="content-block" >'+
-'										Here is direct link to connect with my network. Note: You can click here after download the app and sign up.<br/>'+
+'                    Hi '+reciever+',<br/><br/>I would like to invite to join my network at Curbside Consult.'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
 '										<a href="CurbsideConsult://" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
