@@ -17,7 +17,7 @@ function sendInvitationEmail(senderName,reciverName,emailSendTo)
                 from: "CurbsideConsult@bodybookapps.com",
                 to: emailSendTo,
                 subject: "I would like to invite you to join my network at Curbside Consult.",
-                body: '',
+                body: "Invitation",
                 html: invitationTemplate
             };
 
@@ -34,18 +34,19 @@ function sendInvitationEmail(senderName,reciverName,emailSendTo)
 
 Parse.Cloud.afterSave("Invitation", function(request) {
   //Send Email out
-  sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"));
+  // sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"));
   console.log("Start Logging..............................");
-  console.log(request.object.get("email"));    
+  // console.log(request.object.get("email"));    
   // console.log(request.user.id);    
   console.log("End Logging..............................");
   var query = new Parse.Query("Networking");
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
       //update pending count for the speciality in the group.
+      
     })
     .catch(function(error){
-      response.error(error);
+      console.error(error);
     });    
 });
 
@@ -261,7 +262,7 @@ function generateInvitationEmail() {
 '										<a href="https://goo.gl/qYcjsh" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Downloading CurbsideConsult</a><br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										Here is direct link to connect with my network. Note: You can click here after download the app and sign up.<<br/>'+
+'										Here is direct link to connect with my network. Note: You can click here after download the app and sign up.<br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
 '										<a href="CurbsideConsult://" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
