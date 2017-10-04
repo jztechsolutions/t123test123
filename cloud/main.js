@@ -53,6 +53,9 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
   // console.log(request.object.get("email"));    
   // console.log(request.user.id);    
   // console.log("End Logging..............................");
+  // console.log(specKey);
+  //     console.log(result.get("specialitySetting"));
+  //     console.log(settingDict["pending"]);
 Parse.Cloud.afterSave("Invitation", function(request) {
   // Send Email out
   sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));
@@ -60,12 +63,16 @@ Parse.Cloud.afterSave("Invitation", function(request) {
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
       //update pending count for the speciality in the group.
+      console.log(result.get("specialitySetting"));
       var specKey     = request.object.get("speciality"); 
       var settingDict = result.get("specialitySetting")[specKey];
-      console.log(specKey);
-      console.log(result.get("specialitySetting"));
-      console.log(settingDict["pending"]);
-      settingDict["pending"] = settingDict["pending"]+1;
+
+      if (settingDict["pending"] !== undefined) {
+        settingDict["pending"] = settingDict["pending"]+1;
+      }else{
+        settingDict["pending"] = 1;
+      }
+      
       result.get("specialitySetting")[specKey]= settingDict;
       console.log("End Logging..............................");
       console.log(result.get("specialitySetting"));
