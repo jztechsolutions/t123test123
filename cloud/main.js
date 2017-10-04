@@ -16,7 +16,7 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo)
   userQuery.equalTo('email', emailSendTo);
   userQuery.find({
     success: function(userRegistered) {
-      if (userRegistered != nil){
+      if (userRegistered != null){
         console.log("Start Logging..............................");
         console.log("userRegister "+emailSendTo+userRegistered)
         console.log("End Logging..............................");
