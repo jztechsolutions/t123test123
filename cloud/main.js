@@ -15,16 +15,19 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo)
   var userQuery = new Parse.Query(User);  
   userQuery.equalTo('email', emailSendTo);
   userQuery.find({
-    success: function(userRegister) {
-      console.log("Start Logging..............................");
-      console.log("userRegister")
-      console.log("End Logging..............................");
+    success: function(userRegistered) {
+      if (userRegistered){
+        console.log("Start Logging..............................");
+        console.log("userRegister "+emailSendTo)
+        console.log("End Logging..............................");
+      }else{
+        console.log("Start Logging NOT..............................");
+        console.log("NOTuserRegister" + emailSendTo)
+        console.log("End Logging NOT..............................");
+      }
     },
-    error: function(err) {
-      //TODO: Handle error
-      console.log("Start Logging NOT..............................");
-      console.log("NOTuserRegister")
-      console.log("End Logging NOT..............................");
+    error: function(err) {      
+      
       console.error(err)
     }
   });
