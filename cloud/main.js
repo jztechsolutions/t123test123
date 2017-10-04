@@ -57,7 +57,7 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
   // console.log(result.get("specialitySetting"));
   // console.log(settingDict["pending"]);
   // console.log(result.get("specialitySetting"));
-Parse.Cloud.beforeSave("Invitation", function(request) {  
+Parse.Cloud.beforeSave("Invitation", function(request, response) {  
   var query = new Parse.Query("Networking");
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
