@@ -10,13 +10,12 @@ Parse.Cloud.define('Hello', function(request, response) {
 function sendInvitationEmail(senderName,recieverName,emailSendTo)
 {
   var mailgun = require('mailgun-js')({apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452', domain: 'bodybookapps.com'});
-
-  var User = Parse.Object.extend('_User');
-  var userQuery = new Parse.Query(User);  
+  
+  var userQuery = new Parse.Query(Parse.User);  
   userQuery.equalTo('email', emailSendTo);
-  userQuery.find({
-    success: function(userRegistered) {
-      if (userRegistered != null){
+  userQuery.count({
+    success: function(userCount) {
+      if (userCount > 0){
         console.log("Start Logging..............................");
         console.log("userRegister "+emailSendTo+userRegistered)
         console.log("End Logging..............................");
