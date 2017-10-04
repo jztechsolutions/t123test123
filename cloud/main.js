@@ -25,8 +25,6 @@ function sendInvitationEmail(senderName,reciverName,emailSendTo)
     if (sendError) {
       console.error(sendError);
       // response.error("Uh oh, something went wrong");
-    } else {
-      console.success("Email sent!");
     }            
   });
 }
