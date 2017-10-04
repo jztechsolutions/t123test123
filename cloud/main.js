@@ -18,11 +18,11 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo)
     success: function(userRegistered) {
       if (userRegistered){
         console.log("Start Logging..............................");
-        console.log("userRegister "+emailSendTo)
+        console.log("userRegister "+emailSendTo+userRegistered)
         console.log("End Logging..............................");
       }else{
         console.log("Start Logging NOT..............................");
-        console.log("NOTuserRegister" + emailSendTo)
+        console.log("NOTuserRegister" + emailSendTo+userRegistered)
         console.log("End Logging NOT..............................");
       }
     },
