@@ -22,9 +22,9 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo)
     },
     error: function(err) {
       //TODO: Handle error
-      console.log("Start Logging..............................");
-      console.log("userRegister")
-      console.log("End Logging..............................");
+      console.log("Start Logging NOT..............................");
+      console.log("NOTuserRegister")
+      console.log("End Logging NOT..............................");
       console.error(err)
     }
   });
