@@ -71,7 +71,10 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         settingDict["pending"] = 1;
       }
       if (settingDict["pending"] > (settingDict["total"]-settingDict["taken"])){
-        console.log("Logging.............EXCEEDED................"+settingDict["pending"]+"--"+(settingDict["total"]+"--"+settingDict["taken"]);
+        console.log("Logging.............EXCEEDED................");
+        console.log(settingDict["total"])
+        console.log(settingDict["taken"])
+        console.log(settingDict["pending"])
         response.error("The limit of number user in "+specKey+ " has been exceeded. Please increase the limit or choose different speciality to add friend.");
       }else{
         
