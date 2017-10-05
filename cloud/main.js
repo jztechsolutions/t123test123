@@ -79,11 +79,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         result.save(null, {
           success: function() {              
             console.log("Logging............SAVED...............");
-            console.log(request.object.get("email"));
-            console.log(request.object.get("inviter"));
-            console.log(request.object.get("invitee"));
-            console.log(request.object.get("ivitationCode"));
-
+            sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"))
             response.success();            
           },
           error: function(userProfile, error) {
