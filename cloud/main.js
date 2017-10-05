@@ -72,13 +72,18 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
       }
       if (settingDict["pending"] > (settingDict["total"]-settingDict["taken"])){
         console.log("Logging.............EXCEEDED................");
-        response.error("Number of user in "+specKey+ "has been exceeded. Please increase or choose different speciality to add friend.");
+        response.error("The limit of number user in "+specKey+ " has been exceeded. Please increase the limit or choose different speciality to add friend.");
       }else{
         
         result.get("specialitySetting")[specKey]= settingDict;   
         result.save(null, {
           success: function() {              
             console.log("Logging............SAVED...............");
+            console.log(request.object.get("email"));
+            console.log(request.object.get("inviter"));
+            console.log(request.object.get("invitee"));
+            console.log(request.object.get("ivitationCode"));
+
             response.success();            
           },
           error: function(userProfile, error) {
