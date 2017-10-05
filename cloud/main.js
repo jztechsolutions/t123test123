@@ -311,7 +311,7 @@ function generateInvitationEmailNewUser() {
 '										Here is direct link to connect with my network. Note: You can click here after download the app and sign up.<br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										<a href="CurbsideConsult://invitationCode='+token+'" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
+'										<a href="CurbsideConsult://invitationCode=$='+token+'" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block">'+
 '                    Sincerely,<br/>'+sender+
@@ -399,7 +399,7 @@ function generateInvitationEmailExistingUser() {
 '                    Hi '+reciever+',<br/><br/>I would like to invite to join my network at Curbside Consult.<br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										<a href="CurbsideConsult://invitationCode='+token+'" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
+'										<a href="CurbsideConsult://invitationCode=$='+token+'" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block">'+
 '                    Sincerely,<br/>'+sender+
