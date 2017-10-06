@@ -59,8 +59,7 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
   // console.log(result.get("specialitySetting"));
 Parse.Cloud.beforeSave("Invitation", function(request, response) {  
   var query = new Parse.Query("Networking");
-  console.log("Logging.............START................");
-  console.log(request.object.get("networkObjId").id);
+
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
       //update pending count for the speciality in the group.
@@ -69,28 +68,28 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
       //The settings of the speciality
       var settingDict = result.get("specialitySetting")[specKey];
 
-      //The request doesn't have network
-      if (settingDict["pending"] !== undefined) {
-        //If there is pending object set before then just increase
-        settingDict["pending"] = settingDict["pending"]+1;
-      }else{
-        //There is no pending object then set it to 1
-        settingDict["pending"] = 1;
+      var emailOutCount = request.object.get("emailOutCount")
+
+      if (emailOutCount == 1) {
+        if (settingDict["pending"] !== undefined) {
+          //If there is pending object set before then just increase
+          settingDict["pending"] = settingDict["pending"]+1;
+        }else{
+          //There is no pending object then set it to 1
+          settingDict["pending"] = 1;
+        }
       }
 
+          
 
       if (settingDict["pending"] > (settingDict["total"]-settingDict["taken"])){
-        console.log("Logging.............EXCEEDED................");
-        console.log(settingDict["total"])
-        console.log(settingDict["taken"])
-        console.log(settingDict["pending"])
         response.error("The limit of number user in "+specKey+ " has been exceeded. Please increase the limit or choose different speciality to add friend.");
       }else{
         
         result.get("specialitySetting")[specKey]= settingDict;   
         result.save(null, {
           success: function() {              
-            console.log("Logging............SAVED...............");
+            //console.log("Logging............SAVED...............");
             sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"))
             response.success();            
           },
