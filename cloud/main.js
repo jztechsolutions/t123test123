@@ -65,9 +65,9 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
       //update pending count for the speciality in the group.
       // The speciality that invitation for      
       var specKey     = request.object.get("speciality"); 
-      //The settings of the speciality
+      //The settings of the speciality in Networking 
       var settingDict = result.get("specialitySetting")[specKey];
-
+      //Only count toward pending if its first time invite not resend
       var emailOutCount = request.object.get("emailOutCount")
 
       if (emailOutCount == 1) {
@@ -85,12 +85,23 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
       if (settingDict["pending"] > (settingDict["total"]-settingDict["taken"])){
         response.error("The limit of number user in "+specKey+ " has been exceeded. Please increase the limit or choose different speciality to add friend.");
       }else{
-        
+        // Update specialitySetting after update pending count
         result.get("specialitySetting")[specKey]= settingDict;   
         result.save(null, {
           success: function() {              
             //console.log("Logging............SAVED...............");
-            sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"))
+            //Just send out invitation email when inviting only not updating invitation status and open email track
+            var openedEmail = request.object.get("opened")
+            console.log("Logging............SAVED...............");
+            if (!openedEmail) {
+              console.log(openedEmail);
+            }
+            
+            var invitationStatus = request.object.get("status")
+             
+            if (invitationStatus != "Accepted" || !openedEmail) {
+              sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"))
+            }
             response.success();            
           },
           error: function(userProfile, error) {
