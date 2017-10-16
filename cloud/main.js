@@ -318,19 +318,19 @@ function generateInvitationEmailNewUser() {
 '				<table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action" itemscope itemtype="http://schema.org/ConfirmAction" style="background-color: #fff"><tr><td class="content-wrap" style="box-sizing: border-box; vertical-align: top; margin: 0; padding: 20px;" valign="top">'+
 '							<meta itemprop="name" content="Confirm Email" /><table width="100%" cellpadding="0" cellspacing="0" ><tr>'+
 '                                <td class="content-block">'+
-'                    Dear '+reciever+',<br/><br/>I would like to invite to join my network at Curbside Consult.'+
+'                    Dear '+reciever+',<br/><br/>I would like to invite you to join my network at Curbside Consult.'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										As you might know, the curbside consult has been an age-old practice to share wisdom in healthcare. With Curbside Consult iPhone App, you can get virtual curbsides anywhere and anytime.<br/><br/>'+
+'										As you know, the "curbside consult" is an age-old practice to share wisdom in healthcare. With the Curbside Consult iPhone App, you can get virtual curbsides anywhere and anytime!<br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										You can start by dowloading the app today and explore it.<br/>'+
+'										You can start by downloading the app today to explore it.<br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										<a href="https://goo.gl/qYcjsh" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Downloading CurbsideConsult</a><br/><br/>'+
+'										<a href="https://goo.gl/qYcjsh" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Downloading & Register</a><br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										Here is direct link to connect with my network. Note: You can click here after download the app and sign up.<br/>'+
+'										Here is the direct link to connect with my network. Note: You can subscribe to my network once you have downloaded the app.<br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
 '										<a href="CurbsideConsult://invitationCode=$='+token+'" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
@@ -418,7 +418,7 @@ function generateInvitationEmailExistingUser() {
 '				<table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action" itemscope itemtype="http://schema.org/ConfirmAction" style="background-color: #fff"><tr><td class="content-wrap" style="box-sizing: border-box; vertical-align: top; margin: 0; padding: 20px;" valign="top">'+
 '							<meta itemprop="name" content="Confirm Email" /><table width="100%" cellpadding="0" cellspacing="0" ><tr>'+
 '                                <td class="content-block">'+
-'                    Hi '+reciever+',<br/><br/>I would like to invite to join my network at Curbside Consult.<br/>'+
+'                    Hi '+reciever+',<br/><br/>I would like to invite you to join my network at Curbside Consult.<br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
 '										<a href="CurbsideConsult://invitationCode=$='+token+'" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
