@@ -71,6 +71,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
       var emailOutCount = request.object.get("emailOutCount")
 
       if (emailOutCount == 1) {
+        //Dont increase pending count when it resend email
         if (settingDict["pending"] !== undefined) {
           //If there is pending object set before then just increase
           settingDict["pending"] = settingDict["pending"]+1;
@@ -81,6 +82,10 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
       }
 
           
+      console.log("Logging............Pending...............");
+      console.log(settingDict["pending"]);
+      console.log(settingDict["total"]);
+      console.log(settingDict["taken"]);
 
       if (settingDict["pending"] > (settingDict["total"]-settingDict["taken"])){
         response.error("The limit of number user in "+specKey+ " has been exceeded. Please increase the limit or choose different speciality to add friend.");
