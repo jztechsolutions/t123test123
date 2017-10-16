@@ -70,7 +70,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
       //Only count toward pending if its first time invite not resend
       var emailOutCount = request.object.get("emailOutCount")
 
-      if (emailOutCount == 1) {
+      if (emailOutCount == 1 && invitationStatus != "Accepted") {
         //Dont increase pending count when it resend email
         if (settingDict["pending"] !== undefined) {
           //If there is pending object set before then just increase
