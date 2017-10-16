@@ -71,9 +71,11 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
       var emailOutCount = request.object.get("emailOutCount")
 
       var invitationStatus = request.object.get("status")
-      
 
-      if (emailOutCount == 1 && invitationStatus != "Accepted") {
+      var openedEmail = request.object.get("opened")
+
+
+      if (emailOutCount == 1 && invitationStatus != "Accepted" && !openedEmail) {
         //Dont increase pending count when it resend email
         if (settingDict["pending"] !== undefined) {
           //If there is pending object set before then just increase
@@ -84,12 +86,6 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         }
       }
 
-          
-      console.log("Logging............Pending...............");
-      console.log(settingDict["pending"]);
-      console.log(settingDict["total"]);
-      console.log(settingDict["taken"]);
-
       if (settingDict["pending"] > (settingDict["total"]-settingDict["taken"])){
         response.error("The limit of number user in "+specKey+ " has been exceeded. Please increase the limit or choose different speciality to add friend.");
       }else{
@@ -99,11 +95,9 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
           success: function() {              
             //console.log("Logging............SAVED...............");
             //Just send out invitation email when inviting only not updating invitation status and open email track
-            var openedEmail = request.object.get("opened")
+            
             console.log("Logging............SAVED...............");
-            if (!openedEmail) {
-              console.log(openedEmail);
-            }                        
+                                  
              
             if (invitationStatus != "Accepted" || !openedEmail) {
               sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"))
