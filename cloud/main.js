@@ -324,13 +324,13 @@ function generateInvitationEmailNewUser() {
 '										As you know, the "curbside consult" is an age-old practice to share wisdom in healthcare. With the Curbside Consult iPhone App, you can get virtual curbsides anywhere and anytime!<br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										You can start by downloading the app today to explore it.<br/>'+
+'										You can start by downloading the app today and exploring it.<br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
 '										<a href="https://goo.gl/qYcjsh" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Downloading & Register</a><br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										Here is the direct link to connect with my network. Note: You can subscribe to my network once you have downloaded the app.<br/>'+
+'										Here is a direct link to connect with my network. Note: You can click here after downloading the app and signing up.<br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
 '										<a href="CurbsideConsult://invitationCode=$='+token+'" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Connect with '+sender+'</a><br/><br/>'+
