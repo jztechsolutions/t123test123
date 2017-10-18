@@ -99,7 +99,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
             console.log("Logging............SAVED...............");
                                   
              
-            if (invitationStatus != "Accepted" || !openedEmail) {
+            if (invitationStatus != "Accepted" && !openedEmail) {
               sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"))
             }
             response.success();            
