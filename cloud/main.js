@@ -116,8 +116,11 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         response.error("The limit of number user in "+newSpecKey+ " has been exceeded. Please increase the limit or choose different speciality to add friend.");
       }else{
         // Update specialitySetting after update pending count
-        result.get("specialitySetting")[newSpecKey]         = settingDict; 
-        result.get("specialitySetting")[preUpdatedSpecKey]  = preUpdatedSettingDict;   
+        result.get("specialitySetting")[newSpecKey]         = settingDict;
+        if (preUpdatedSpecKey) {
+          result.get("specialitySetting")[preUpdatedSpecKey]  = preUpdatedSettingDict;   
+        }
+        
         result.save(null, {
           success: function() {              
             //console.log("Logging............SAVED...............");
