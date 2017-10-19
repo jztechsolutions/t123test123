@@ -101,7 +101,9 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
             console.log(preUpdatedSpecKey);
             preUpdatedSettingDict = result.get("specialitySetting")[preUpdatedSpecKey];
             //Decrease pending count for the pre-updated spec
+            console.log(preUpdatedSettingDict["pending"]);
             preUpdatedSettingDict["pending"] = preUpdatedSettingDict["pending"]-1;
+            console.log(preUpdatedSettingDict["pending"]);
           }
           
         },
