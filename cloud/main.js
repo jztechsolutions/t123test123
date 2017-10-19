@@ -58,22 +58,25 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
   // console.log(settingDict["pending"]);
   // console.log(result.get("specialitySetting"));
 Parse.Cloud.beforeSave("Invitation", function(request, response) {  
+  
   var query = new Parse.Query("Networking");
 
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
       //update pending count for the speciality in the group.
       // The speciality that invitation for      
-      var specKey     = request.object.get("speciality"); 
+      var newSpecKey        = request.object.get("speciality"); 
       //The settings of the speciality in Networking 
-      var settingDict = result.get("specialitySetting")[specKey];
+      var settingDict       = result.get("specialitySetting")[newSpecKey];
       //Only count toward pending if its first time invite not resend
-      var emailOutCount = request.object.get("emailOutCount")
+      var emailOutCount     = request.object.get("emailOutCount")
 
-      var invitationStatus = request.object.get("status")
+      var invitationStatus  = request.object.get("status")
 
-      var openedEmail = request.object.get("opened")
+      var openedEmail       = request.object.get("opened")
 
+      var preUpdatedSpecKey = ""
+      var preUpdatedSettingDict = {}
 
       if (emailOutCount == 1 && invitationStatus != "Accepted" && !openedEmail) {
         //Dont increase pending count when it resend email
@@ -84,13 +87,37 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
           //There is no pending object then set it to 1
           settingDict["pending"] = 1;
         }
+      }else if (emailOutCount > 1){
+        console.log("Logging............Resend...............");
+        //get pre-updated speciality to reset 
+        var invitationQuery = new Parse.Query("Invitation");
+        invitationQuery.get(request.object.id, { 
+        success: function(preUpdatedInvitation) {
+          //Get the old spec value
+          preUpdatedSpecKey  = preUpdatedInvitation.get("speciality");
+
+          if (newSpecKey != preUpdatedSpecKey) {
+            console.log("Logging............PRE-UPDATED...............");
+            console.log(preUpdatedSpecKey);
+            preUpdatedSettingDict = result.get("specialitySetting")[preUpdatedSpecKey];
+            //Decrease pending count for the pre-updated spec
+            preUpdatedSettingDict["pending"] = preUpdatedSettingDict["pending"]-1;
+          }
+          
+        },
+        error: function(row, error) {
+            response.error(error.message);
+        }
+    });
+
       }
 
       if (settingDict["pending"] > (settingDict["total"]-settingDict["taken"])){
-        response.error("The limit of number user in "+specKey+ " has been exceeded. Please increase the limit or choose different speciality to add friend.");
+        response.error("The limit of number user in "+newSpecKey+ " has been exceeded. Please increase the limit or choose different speciality to add friend.");
       }else{
         // Update specialitySetting after update pending count
-        result.get("specialitySetting")[specKey]= settingDict;   
+        result.get("specialitySetting")[newSpecKey]         = settingDict; 
+        result.get("specialitySetting")[preUpdatedSpecKey]  = preUpdatedSettingDict;   
         result.save(null, {
           success: function() {              
             //console.log("Logging............SAVED...............");
