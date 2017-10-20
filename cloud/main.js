@@ -58,70 +58,72 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
   // console.log(settingDict["pending"]);
   // console.log(result.get("specialitySetting"));
 Parse.Cloud.beforeSave("Invitation", function(request, response) {  
+
+  var newSpecKey        = request.object.get("speciality"); 
   
+  //Only count toward pending if its first time invite not resend
+  var emailOutCount     = request.object.get("emailOutCount")
+
+  var invitationStatus  = request.object.get("status")
+
+  var preUpdatedSpecKey = ""
+  var preUpdatedSettingDict = {}
+
+
+
+  //Get Network Obj from Invitation to update the counts
   var query = new Parse.Query("Networking");
 
   query.get(request.object.get("networkObjId").id)  
     .then(function(result){
       //update pending count for the speciality in the group.
-      // The speciality that invitation for      
-      var newSpecKey        = request.object.get("speciality"); 
+      // The speciality that invitation for            
       //The settings of the speciality in Networking 
-      var settingDict       = result.get("specialitySetting")[newSpecKey];
-      //Only count toward pending if its first time invite not resend
-      var emailOutCount     = request.object.get("emailOutCount")
+      var settingDict = result.get("specialitySetting")[newSpecKey];
 
-      var invitationStatus  = request.object.get("status")
 
-      var openedEmail       = request.object.get("opened")
-
-      var preUpdatedSpecKey = ""
-      var preUpdatedSettingDict = {}
-
-      if (emailOutCount == 1 && invitationStatus != "Accepted" && !openedEmail) {
-        //Dont increase pending count when it resend email
-        if (settingDict["pending"] !== undefined) {
-          //If there is pending object set before then just increase
-          settingDict["pending"] = settingDict["pending"]+1;
-        }else{
-          //There is no pending object then set it to 1
-          settingDict["pending"] = 1;
-        }
+      //Brand new invitation-> update the pending count
+      //Dont increase pending count when it resend email
+      if (emailOutCount == 1 && invitationStatus != "Accepted") {        
+        settingDict["pending"] = settingDict["pending"]+1;
       }else if (emailOutCount > 1){
+        //When the email resent, check if the new spec is updated
+
         console.log("Logging............Resend...............");
         //get pre-updated speciality to reset 
+        //Query the current Invitation which is version before updated
         var invitationQuery = new Parse.Query("Invitation");
         invitationQuery.get(request.object.id, { 
-        success: function(preUpdatedInvitation) {
-          //Get the old spec value
-          preUpdatedSpecKey  = preUpdatedInvitation.get("speciality");
+          success: function(preUpdatedInvitation) {
+            //Get the old spec value
+            preUpdatedSpecKey  = preUpdatedInvitation.get("speciality");
 
-          if (newSpecKey != preUpdatedSpecKey) {
-            console.log("Logging............PRE-UPDATED...............");
-            console.log(preUpdatedSpecKey);
-            preUpdatedSettingDict = result.get("specialitySetting")[preUpdatedSpecKey];
-            //Decrease pending count for the pre-updated spec
-            console.log(preUpdatedSettingDict["pending"]);
-            if (preUpdatedSettingDict["pending"] > 0) {
-              preUpdatedSettingDict["pending"] = preUpdatedSettingDict["pending"]-1;
-            }
+            //The spec is updating
+            if (newSpecKey != preUpdatedSpecKey) {
+              console.log("Logging............PRE-UPDATED...............");
+              console.log(preUpdatedSpecKey);
+              //At this point we know that the spec is updated
+              //Thus we need to reduce pending count from the old spec            
+              preUpdatedSettingDict = result.get("specialitySetting")[preUpdatedSpecKey];
+              //Decrease pending count for the pre-updated spec            
+              if (preUpdatedSettingDict["pending"] > 0) {
+                preUpdatedSettingDict["pending"] = preUpdatedSettingDict["pending"]-1;
+              }
             
-            console.log(preUpdatedSettingDict["pending"]);
-          }
+              console.log(preUpdatedSettingDict["pending"]);
+            }
           
-        },
-        error: function(row, error) {
+          },error: function(row, error) {
             response.error(error.message);
-        }
-    });
-
+          }
+        });
       }
 
       if (settingDict["pending"] > (settingDict["total"]-settingDict["taken"])){
         response.error("The limit of number user in "+newSpecKey+ " has been exceeded. Please increase the limit or choose different speciality to add friend.");
       }else{
         // Update specialitySetting after update pending count
-        result.get("specialitySetting")[newSpecKey]         = settingDict;
+        result.get("specialitySetting")[newSpecKey]           = settingDict;
         if (preUpdatedSpecKey) {
           result.get("specialitySetting")[preUpdatedSpecKey]  = preUpdatedSettingDict;   
         }
@@ -134,7 +136,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
             console.log("Logging............SAVED...............");
                                   
              
-            if (invitationStatus != "Accepted" && !openedEmail) {
+            if (invitationStatus != "Accepted") {
               sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"))
             }
             response.success();            
