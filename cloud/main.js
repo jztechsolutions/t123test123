@@ -21,8 +21,7 @@ function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
       console.log("Logging............SENT...............");
       console.log('SMS sent');
     }).catch(function(err){      
-      console.error(err);
-      response.error(err.message);
+      console.error(err);      
     });
 }
 
@@ -56,8 +55,7 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
       mailgun.messages().send(mail, function (sendError, body) {
         if (sendError) {
           console.error(sendError);
-          // response.error("Uh oh, something went wrong");
-          response.error(error.message);
+          // response.error("Uh oh, something went wrong");          
         }            
       });
 
