@@ -8,19 +8,21 @@ Parse.Cloud.define('Hello', function(request, response) {
 
 function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
 {
-  var invitationSubject  = recieverName + ", please join my Curbside Consult network.\n";
-  var invitationBody     = "You can start by downloading the app today and exploring it. https://goo.gl/qYcjsh"
+  var invitationMSG  = recieverName + ", please join my Curbside Consult network.\nYou can start by downloading the app today and exploring it. https://goo.gl/qYcjsh";  
 
   var client = require('twilio')('AC4b51bbdcaae206f74fff39eee9549be6', '5af7ac55302d113a233db59953a0c215');
   
+  console.log(invitationMSG);
+
   client.api.messages
     .create({
       to:smsNumbSendTo, 
       from: '+19292003005 ', 
-      body: invitationSubject + invitationBody
+      body: invitationMSG
     }).then(function(responseData){
+      console.log("Logging............SENT...............");
       console.log('SMS sent');
-    }).catch(function(err){
+    }).catch(function(err){      
       console.error(err);
     });
 }
@@ -149,8 +151,10 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
              
             if (invitationStatus != "Accepted") {
               if (request.object.get("email")) {
+                console.log("Logging............Email Sent...............");
                 sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));
               }else if (request.object.get("phone")){
+                console.log("Logging............SMS Sent...............");
                 sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("phone"),request.object.get("invitationCode"));
               }
             
