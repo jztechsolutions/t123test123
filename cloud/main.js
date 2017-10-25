@@ -143,16 +143,14 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
             //console.log("Logging............SAVED...............");
             //Just send out invitation email when inviting only not updating invitation status and open email track
             
-            console.log("Logging............SAVED...............");
+            //console.log("Logging............SAVED...............");
                                   
              
             if (invitationStatus != "Accepted") {
-              if (request.object.get("email")) {
-                console.log("Logging............Email Sent...............");
+              if (request.object.get("email")) {                
                 sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));
-              }else if (request.object.get("cellPhone")){
-                console.log("Logging............SMS Sent...............");
-                sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("celPhone"),request.object.get("invitationCode"));
+              }else if (request.object.get("cellPhone")){                
+                sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("cellPhone"),request.object.get("invitationCode"));
               }
             
             }
