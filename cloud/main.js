@@ -11,12 +11,10 @@ function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
   var invitationMSG  = recieverName + ", please join my Curbside Consult network.\nYou can start by downloading the app today and exploring it. https://goo.gl/qYcjsh";  
 
   var client = require('twilio')('AC4b51bbdcaae206f74fff39eee9549be6', '5af7ac55302d113a233db59953a0c215');
-  
-  console.log(invitationMSG);
 
   client.api.messages
     .create({
-      to:smsNumbSendTo, 
+      to: smsNumbSendTo, 
       from: '+19292003005 ', 
       body: invitationMSG
     }).then(function(responseData){
@@ -121,9 +119,8 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
               //Decrease pending count for the pre-updated spec            
               if (preUpdatedSettingDict["pending"] > 0) {
                 preUpdatedSettingDict["pending"] = preUpdatedSettingDict["pending"]-1;
-              }
-            
-              console.log(preUpdatedSettingDict["pending"]);
+              }            
+              //console.log(preUpdatedSettingDict["pending"]);
             }
           
           },error: function(row, error) {
@@ -155,7 +152,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
                 sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));
               }else if (request.object.get("cellPhone")){
                 console.log("Logging............SMS Sent...............");
-                sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("phone"),request.object.get("invitationCode"));
+                sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("celPhone"),request.object.get("invitationCode"));
               }
             
             }
