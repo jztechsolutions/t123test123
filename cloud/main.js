@@ -2,40 +2,27 @@
 
 
 //Functions
-Parse.Cloud.define('Hello', function(request, response) {
-  sendInvitationSMS ('Johnny','User','+19292148211','abcdef')
+Parse.Cloud.define('Hello', function(request, response) {  
   response.success('Hello from BodyBookApps Team');
 });
 
 function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
 {
+  var invitationSubject  = recieverName + ", please join my Curbside Consult network.\n";
+  var invitationBody     = "You can start by downloading the app today and exploring it. https://goo.gl/qYcjsh"
+
   var client = require('twilio')('AC4b51bbdcaae206f74fff39eee9549be6', '5af7ac55302d113a233db59953a0c215');
   
   client.api.messages
     .create({
       to:smsNumbSendTo, 
       from: '+19292003005 ', 
-      body: 'Hello world!' 
-    }).then(function(data){
+      body: invitationSubject + invitationBody
+    }).then(function(responseData){
       console.log('SMS sent');
     }).catch(function(err){
       console.error(err);
     });
-
-  // Send an SMS message
-  // client.sendSms({
-  //     to:smsNumbSendTo, 
-  //     from: '+19292003005 ', 
-  //     body: 'Hello world!' 
-  //   }, function(err, responseData) { 
-  //     if (err) {
-  //       console.log(err);
-  //     } else { 
-  //       console.log(responseData.from); 
-  //       console.log(responseData.body);
-  //     }
-  //   }
-  // );
 }
 
 // Parse.Cloud.define('SendEmail', function(request, response) {
@@ -86,7 +73,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
   var newSpecKey        = request.object.get("speciality"); 
   
   //Only count toward pending if its first time invite not resend
-  var emailOutCount     = request.object.get("emailOutCount")
+  var invitationOutCount     = request.object.get("invitationOutCount")
 
   var invitationStatus  = request.object.get("status")
 
@@ -108,9 +95,9 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
 
       //Brand new invitation-> update the pending count
       //Dont increase pending count when it resend email
-      if (emailOutCount == 1 && invitationStatus != "Accepted") {        
+      if (invitationOutCount == 1 && invitationStatus != "Accepted") {        
         settingDict["pending"] = settingDict["pending"]+1;
-      }else if (emailOutCount > 1){
+      }else if (invitationOutCount > 1){
         //When the email resent, check if the new spec is updated
 
         console.log("Logging............Resend...............");
@@ -161,7 +148,12 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
                                   
              
             if (invitationStatus != "Accepted") {
-              sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"))
+              if (request.object.get("email")) {
+                sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));
+              }else if (request.object.get("phone")){
+                sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("phone"),request.object.get("invitationCode");
+              }
+            
             }
             response.success();            
           },
