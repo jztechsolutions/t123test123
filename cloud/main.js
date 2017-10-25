@@ -3,8 +3,29 @@
 
 //Functions
 Parse.Cloud.define('Hello', function(request, response) {
+  sendInvitationSMS ('Johnny','User','+19292148211','abcdef')
   response.success('Hello from BodyBookApps Team');
 });
+
+function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
+{
+  var client = require('twilio')('AC4b51bbdcaae206f74fff39eee9549be6', '5af7ac55302d113a233db59953a0c215');
+  
+  // Send an SMS message
+  client.sendSms({
+      to:smsNumbSendTo, 
+      from: '+19292003005 ', 
+      body: 'Hello world!' 
+    }, function(err, responseData) { 
+      if (err) {
+        console.log(err);
+      } else { 
+        console.log(responseData.from); 
+        console.log(responseData.body);
+      }
+    }
+  );
+}
 
 // Parse.Cloud.define('SendEmail', function(request, response) {
 function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
@@ -49,14 +70,6 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
 }
 
 
-  // console.log("Start Logging..............................");
-  // console.log(request.object.get("email"));    
-  // console.log(request.user.id);    
-  // console.log("End Logging..............................");
-  // console.log(specKey);
-  // console.log(result.get("specialitySetting"));
-  // console.log(settingDict["pending"]);
-  // console.log(result.get("specialitySetting"));
 Parse.Cloud.beforeSave("Invitation", function(request, response) {  
 
   var newSpecKey        = request.object.get("speciality"); 
