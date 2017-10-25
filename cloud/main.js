@@ -11,20 +11,31 @@ function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
 {
   var client = require('twilio')('AC4b51bbdcaae206f74fff39eee9549be6', '5af7ac55302d113a233db59953a0c215');
   
-  // Send an SMS message
-  client.sendSms({
+  client.api.messages
+    .create({
       to:smsNumbSendTo, 
       from: '+19292003005 ', 
       body: 'Hello world!' 
-    }, function(err, responseData) { 
-      if (err) {
-        console.log(err);
-      } else { 
-        console.log(responseData.from); 
-        console.log(responseData.body);
-      }
-    }
-  );
+    }).then(function(data){
+      console.log('SMS sent');
+    }).catch(function(err){
+      console.error(err);
+    });
+
+  // Send an SMS message
+  // client.sendSms({
+  //     to:smsNumbSendTo, 
+  //     from: '+19292003005 ', 
+  //     body: 'Hello world!' 
+  //   }, function(err, responseData) { 
+  //     if (err) {
+  //       console.log(err);
+  //     } else { 
+  //       console.log(responseData.from); 
+  //       console.log(responseData.body);
+  //     }
+  //   }
+  // );
 }
 
 // Parse.Cloud.define('SendEmail', function(request, response) {
