@@ -22,6 +22,7 @@ function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
       console.log('SMS sent');
     }).catch(function(err){      
       console.error(err);
+      response.error(err.message);
     });
 }
 
@@ -56,6 +57,7 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
         if (sendError) {
           console.error(sendError);
           // response.error("Uh oh, something went wrong");
+          response.error(error.message);
         }            
       });
 
