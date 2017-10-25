@@ -153,7 +153,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
               if (request.object.get("email")) {
                 console.log("Logging............Email Sent...............");
                 sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));
-              }else if (request.object.get("phone")){
+              }else if (request.object.get("cellPhone")){
                 console.log("Logging............SMS Sent...............");
                 sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("phone"),request.object.get("invitationCode"));
               }
