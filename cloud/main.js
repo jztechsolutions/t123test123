@@ -186,7 +186,7 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
     userProfileQuery.count({
       success: function(userProfileCount) {
         if (userProfileCount > 0){          
-          response.error("Cellphone:("+request.params.cellPhone+") has been registered in our system.");
+          response.error("The entered cellphone:("+request.params.cellPhone+") has been registered in our system.");
         }else{
           //Create new profile object
           let UserProfile = Parse.Object.extend("UserProfile");
