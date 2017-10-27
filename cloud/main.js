@@ -181,6 +181,7 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
     var userId = request.user.id;
 
     //Check if the phone number is registered before 
+    console.log("Logging............START QUERY...............");
     var userProfileQuery =  new Parse.Query("UserProfile");
     userProfileQuery.equalTo('cellPhone', request.params.cellPhone);
     userProfileQuery.count({
@@ -188,8 +189,9 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
         if (userCount > 0){
           console.log("Logging............FAIL EXIST PHONE...............");
           console.log("Cellphone:"+request.params.cellPhone+" has been registered in our system.");
-          response.error("Cellphone:"+request.params.cellPhone+" has been registered in our system.");
+          response.error("The entered cellphone has been registered in our system.");
         }else{
+          console.log("Logging............ADD PROFILE...............");
           //Create new profile object
           let UserProfile = Parse.Object.extend("UserProfile");
           var userProfile = new UserProfile();
@@ -232,21 +234,19 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
             error: function(userProfile, error) {
               // Execute any logic that should take place if the save fails.
               // error is a Parse.Error with an error code and message.
+              console.log("Logging............FAIL ADD...............");
               response.error(error);
             }
           });          
         }
-      },error: function(err) {            
+      },error: function(err) {   
+        console.log("Logging............FAIL CHECK PHONE...............");         
         console.error(err)
       }
     });
   }  
 });
 
-        // console.log("Start Logging..............................");
-        // console.log(newProfile);    
-        // console.log(userProfile.id);    
-        // console.log("End Logging..............................");
 
 
 Parse.Cloud.define("RemoveProfileXXX", function(request, response){
