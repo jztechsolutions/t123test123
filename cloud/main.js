@@ -186,7 +186,7 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
     userProfileQuery.equalTo('cellPhone', request.params.cellPhone);
     userProfileQuery.count({
       success: function(userProfileCount) {
-        if (userCount > 0){
+        if (userProfileCount > 0){
           console.log("Logging............FAIL EXIST PHONE...............");
           console.log("Cellphone:"+request.params.cellPhone+" has been registered in our system.");
           response.error("The entered cellphone has been registered in our system.");
