@@ -180,50 +180,62 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
     
     var userId = request.user.id;
 
-    //Create new profile object
-    let UserProfile = Parse.Object.extend("UserProfile");
-    var userProfile = new UserProfile();
-    userProfile.set("lastName",request.params.lastName);
-    userProfile.set("firstName",request.params.firstName);
-    userProfile.set("officePhone",request.params.officePhone);
-    userProfile.set("cellPhone",request.params.cellPhone);
-    userProfile.set("licenseNumb",request.params.licenseNumb);
-    userProfile.set("gender",request.params.gender);
-    userProfile.set("street",request.params.street);
-    userProfile.set("city",request.params.city);
-    userProfile.set("state",request.params.state);
-    userProfile.set("zip",request.params.zip);
-    userProfile.set("pri_spec",request.params.pri_spec);  
-    userProfile.set("med_sch",request.params.med_sch);
-    userProfile.set("grad_yr",request.params.grad_yr);
-    userProfile.addUnique("myNetworksObjId",request.params.myNetworksObjId);
+    //Check if the phone number is registered before 
+    var userProfileQuery =  new Parse.Query("UserProfile");
+    userProfileQuery.equalTo('cellPhone', request.params.cellPhone);
+    userProfileQuery.count({
+      success: function(userProfileCount) {
+        if (userCount > 0){
+          response.error("Cellphone:"+request.params.cellPhone+" has been registered in our system.");
+        }else{
+          //Create new profile object
+          let UserProfile = Parse.Object.extend("UserProfile");
+          var userProfile = new UserProfile();
+          userProfile.set("lastName",request.params.lastName);
+          userProfile.set("firstName",request.params.firstName);
+          userProfile.set("officePhone",request.params.officePhone);
+          userProfile.set("cellPhone",request.params.cellPhone);
+          userProfile.set("licenseNumb",request.params.licenseNumb);
+          userProfile.set("gender",request.params.gender);
+          userProfile.set("street",request.params.street);
+          userProfile.set("city",request.params.city);
+          userProfile.set("state",request.params.state);
+          userProfile.set("zip",request.params.zip);
+          userProfile.set("pri_spec",request.params.pri_spec);  
+          userProfile.set("med_sch",request.params.med_sch);
+          userProfile.set("grad_yr",request.params.grad_yr);
+          userProfile.addUnique("myNetworksObjId",request.params.myNetworksObjId);
 
-    userProfile.save(null, {
-      success: function(newProfile) {
-        // CONNECT THE NEW PROFILE WITH USERNAME        
-        const currentUserQuery = new Parse.Query("_User");
-        currentUserQuery.get(userId)
-          .then(function(user){
-            user.set("userProfileObjId", newProfile);
-            user.save(null, {useMasterKey: true});            
-            response.success({"UserId":user.id,"UserProfileId":newProfile.id});
-          })          
-          .catch(function(error){
-            //Delete the saved profile if can't connect with username
-            Parse.Object.destroyAll(newProfile)
-              .then(function(){
-                response.error("Internal Error");
-              })    
-              .catch(function(error){            
-                response.error(error);
-              });        
-          });        
-
-      },
-      error: function(userProfile, error) {
-        // Execute any logic that should take place if the save fails.
-        // error is a Parse.Error with an error code and message.
-        response.error(error);
+          userProfile.save(null, {
+            success: function(newProfile) {
+              // CONNECT THE NEW PROFILE WITH USERNAME        
+              const currentUserQuery = new Parse.Query(Parse.User);
+              currentUserQuery.get(userId)
+              .then(function(user){
+                user.set("userProfileObjId", newProfile);
+                user.save(null, {useMasterKey: true});            
+                response.success({"UserId":user.id,"UserProfileId":newProfile.id});
+              })          
+              .catch(function(error){
+                //Delete the saved profile if can't connect with username
+                Parse.Object.destroyAll(newProfile)
+                  .then(function(){
+                    response.error("Internal Error");
+                  })    
+                  .catch(function(error){            
+                    response.error(error);
+                  });        
+              });
+            },
+            error: function(userProfile, error) {
+              // Execute any logic that should take place if the save fails.
+              // error is a Parse.Error with an error code and message.
+              response.error(error);
+            }
+          });          
+        }
+      },error: function(err) {            
+        console.error(err)
       }
     });
   }  
