@@ -213,6 +213,7 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
               currentUserQuery.get(userId)
               .then(function(user){
                 user.set("userProfileObjId", newProfile);
+                user.set("cellPhone",request.params.cellPhone);
                 user.save(null, {useMasterKey: true});            
                 response.success({"UserId":user.id,"UserProfileId":newProfile.id});
               })          
