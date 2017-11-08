@@ -137,10 +137,12 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
 
         let newSpecialitySettingDict = result.get("specialitySetting");
         console.log(newSpecialitySettingDict);
-        newSpecialitySettingDict.set(newSpecKey,settingDict);
+        newSpecialitySettingDict[newSpecKey] = settingDict;
         if (preUpdatedSpecKey) {
-          newSpecialitySettingDict.set(preUpdatedSpecKey,preUpdatedSettingDict);   
+          newSpecialitySettingDict[preUpdatedSpecKey] = preUpdatedSettingDict;       
         }
+
+        result.set("specialitySetting",newSpecialitySettingDict)
 
         console.log("Logging............END UPDATE SETING...............");
         console.log(newSpecialitySettingDict);
