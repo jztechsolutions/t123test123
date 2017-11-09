@@ -102,19 +102,20 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         //When the email resent, check if the new spec is updated
 
         console.log("Logging............Resend...............");                
-        //The spec is updating
+
         if (newSpecKey != preUpdatedSpecKey) {
           console.log("Logging............PRE-UPDATED...............");
-          console.log(preUpdatedSpecKey);
+          
           //At this point we know that the spec was updated/changed
           //Thus we need to reduce pending count from the old spec            
           preUpdatedSettingDict = result.get("specialitySetting")[preUpdatedSpecKey];
+          console.log(preUpdatedSettingDict);
           //Decrease pending count for the pre-updated spec            
           if (preUpdatedSettingDict["pending"] > 0) {
+            console.log("Reset Pending");
             preUpdatedSettingDict["pending"] = preUpdatedSettingDict["pending"]-1;
           }                          
         }
-        
       }
 
       if (settingDict["pending"] > (settingDict["total"]-settingDict["taken"])){
@@ -135,7 +136,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         result.set("specialitySetting",newSpecialitySettingDict)
 
         console.log("Logging............END UPDATE SETING...............");
-        console.log(newSpecialitySettingDict);
+        console.log(result);
         
         result.save(null, {
           success: function() {              
