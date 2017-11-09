@@ -73,19 +73,20 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
   var newSpecKey          = request.object.get("speciality"); 
   
   //Only count toward pending if its first time invite not resend
-  var invitationOutCount  = request.object.get("invitationOutCount")
+  var invitationOutCount  = request.object.get("invitationOutCount");
 
-  var invitationStatus    = request.object.get("status")
+  var invitationStatus    = request.object.get("status");
 
-  var preUpdatedSpecKey   = request.object.get("prevSpeciality")  
+  var preUpdatedSpecKey   = request.object.get("prevSpeciality");
 
-  var preUpdatedSettingDict = {}
+  var preUpdatedSettingDict = {};
 
 
   //Get Network Obj from Invitation to update the counts
   var query = new Parse.Query("Networking");
 
   query.get(request.object.get("networkObjId").id)  
+  
     .then(function(result){
       //update pending count for the speciality in the group.
       // The speciality that invitation for            
@@ -136,7 +137,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         result.set("specialitySetting",newSpecialitySettingDict)
 
         console.log("Logging............END UPDATE SETING...............");
-        console.log(result);
+        console.log(newSpecialitySettingDict);
         
         result.save(null, {
           success: function() {              
