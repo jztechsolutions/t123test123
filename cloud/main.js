@@ -70,16 +70,16 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
 
 Parse.Cloud.beforeSave("Invitation", function(request, response) {  
 
-  var newSpecKey        = request.object.get("speciality"); 
+  var newSpecKey          = request.object.get("speciality"); 
   
   //Only count toward pending if its first time invite not resend
-  var invitationOutCount     = request.object.get("invitationOutCount")
+  var invitationOutCount  = request.object.get("invitationOutCount")
 
-  var invitationStatus  = request.object.get("status")
+  var invitationStatus    = request.object.get("status")
 
-  var preUpdatedSpecKey = ""
+  var preUpdatedSpecKey   = request.object.get("prevSpeciality")  
+
   var preUpdatedSettingDict = {}
-
 
 
   //Get Network Obj from Invitation to update the counts
@@ -101,32 +101,20 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
       }else if (invitationOutCount > 1){
         //When the email resent, check if the new spec is updated
 
-        console.log("Logging............Resend...............");
-        //get pre-updated speciality to reset 
-        //Query the current Invitation which is version before updated
-        var invitationQuery = new Parse.Query("Invitation");
-        invitationQuery.get(request.object.id, { 
-          success: function(preUpdatedInvitation) {
-            //Get the old spec value
-            preUpdatedSpecKey  = preUpdatedInvitation.get("speciality");
-
-            //The spec is updating
-            if (newSpecKey != preUpdatedSpecKey) {
-              console.log("Logging............PRE-UPDATED...............");
-              console.log(preUpdatedSpecKey);
-              //At this point we know that the spec was updated/changed
-              //Thus we need to reduce pending count from the old spec            
-              preUpdatedSettingDict = result.get("specialitySetting")[preUpdatedSpecKey];
-              //Decrease pending count for the pre-updated spec            
-              if (preUpdatedSettingDict["pending"] > 0) {
-                preUpdatedSettingDict["pending"] = preUpdatedSettingDict["pending"]-1;
-              }                          
-            }
-          
-          },error: function(row, error) {
-            response.error(error.message);
-          }
-        });
+        console.log("Logging............Resend...............");                
+        //The spec is updating
+        if (newSpecKey != preUpdatedSpecKey) {
+          console.log("Logging............PRE-UPDATED...............");
+          console.log(preUpdatedSpecKey);
+          //At this point we know that the spec was updated/changed
+          //Thus we need to reduce pending count from the old spec            
+          preUpdatedSettingDict = result.get("specialitySetting")[preUpdatedSpecKey];
+          //Decrease pending count for the pre-updated spec            
+          if (preUpdatedSettingDict["pending"] > 0) {
+            preUpdatedSettingDict["pending"] = preUpdatedSettingDict["pending"]-1;
+          }                          
+        }
+        
       }
 
       if (settingDict["pending"] > (settingDict["total"]-settingDict["taken"])){
