@@ -99,14 +99,10 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
       //Dont increase pending count when it resend email
       if (invitationOutCount == 1 && invitationStatus != "Accepted") {        
         settingDict["pending"] = settingDict["pending"]+1;
-      }else if (invitationOutCount > 1){
-        //When the email resent, check if the new spec is updated
-
-        console.log("Logging............Resend...............");                
-
+      }else if (invitationOutCount > 1) {
+        /*When the email resent, check if the new spec is updated*/
+        console.log("Logging............Resend...............");          
         if (newSpecKey != preUpdatedSpecKey) {
-          console.log("Logging............PRE-UPDATED...............");
-          
           //At this point we know that the spec was updated/changed
           //Thus we need to reduce pending count from the old spec            
           preUpdatedSettingDict = result.get("specialitySetting")[preUpdatedSpecKey];
@@ -124,22 +120,15 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         response.error("The limit of number user in "+newSpecKey+ " has been exceeded. Please increase the limit or choose different speciality to add friend.");
       }else{
         // Update specialitySetting after update pending count
-        console.log("Logging............UPDATING SETTING...............");
-
-        let newSpecialitySettingDict = result.get("specialitySetting");
-        console.log(settingDict);
+        let newSpecialitySettingDict = result.get("specialitySetting");        
         
         newSpecialitySettingDict[newSpecKey] = settingDict;
-        if (preUpdatedSpecKey) {
-          console.log(preUpdatedSpecKey + " " +preUpdatedSettingDict);
+        if (preUpdatedSpecKey) {          
           newSpecialitySettingDict[preUpdatedSpecKey] = preUpdatedSettingDict;       
         }
 
-        result.set("specialitySetting",newSpecialitySettingDict)
+        result.set("specialitySetting",newSpecialitySettingDict);
 
-        console.log("Logging............END UPDATE SETING...............");
-        console.log(newSpecialitySettingDict);
-        
         result.save(null, {
           success: function() {              
             console.log("Logging............SAVED...............");
