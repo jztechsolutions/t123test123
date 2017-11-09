@@ -114,6 +114,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
           //Decrease pending count for the pre-updated spec            
           if (preUpdatedSettingDict["pending"] > 0) {
             console.log("Reset Pending");
+            settingDict["pending"] = settingDict["pending"]+1;
             preUpdatedSettingDict["pending"] = preUpdatedSettingDict["pending"]-1;
           }                          
         }
