@@ -226,12 +226,14 @@ Parse.Cloud.afterSave("Answer", function(request) {
         success: function(userProfileObj) {
           let responserName = userProfileObj.get("lastName");
 
-          var userPointer = {"__type":"Pointer","className":"_User","objectId":questionObj.get("userObjectId")};
+          var userPointer = {"__type":"Pointer","className":"_User","objectId":questionObj.get("userObjectId").id};
           console.log(userPointer);
 
           var pushQuery = new Parse.Query("PushNotification");
           pushQuery.equalTo('userObjectId', userPointer);
-          pushQuery.find().then(function (results) {
+          pushQuery.find()
+          .then(function (results) {
+            console.log("Logging............TOKEN...............");
             console.log(results.get("playerId"));
             var message = { 
               app_id: oneSignalAppId,
@@ -244,8 +246,7 @@ Parse.Cloud.afterSave("Answer", function(request) {
           }, function (err) {
             console.error('Error: ' + error.code + ' - ' + error.message);
           });
-          
-    
+      
         },
         error: function(error) {
             console.error('Error: ' + error.code + ' - ' + error.message);
