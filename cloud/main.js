@@ -226,7 +226,8 @@ Parse.Cloud.afterSave("Answer", function(request) {
         success: function(userProfileObj) {
           let responserName = userProfileObj.get("lastName");
 
-          var userPointer = {"__type":"Pointer","className":"_User","objectId":questionObj.get("userObjectId").id};
+          var userPointer = {"__type":"Pointer","className":"_User","objectId":questionObj.get("userObjectId")};
+          console.log(userPointer);
 
           var pushQuery = new Parse.Query("PushNotification");
           pushQuery.equalTo('userObjectId', userPointer);
