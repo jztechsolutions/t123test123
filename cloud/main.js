@@ -166,6 +166,7 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
     .then((results) => {
       for (let i = 0; i < results.length; ++i) {
         results[i].set("enable",false);
+        results[i].save();
       }
       response.success("Successful");
     })
