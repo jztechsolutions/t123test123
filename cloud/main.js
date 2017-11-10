@@ -1,5 +1,5 @@
 //Variables
-
+let oneSignalAppId = "0279c558-1a15-408d-a659-b73ab822d2e1";
 
 //Functions
 Parse.Cloud.define('Hello', function(request, response) {  
@@ -25,7 +25,6 @@ function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
     });
 }
 
-// Parse.Cloud.define('SendEmail', function(request, response) {
 function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
 {
   var mailgun = require('mailgun-js')({apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452', domain: 'bodybookapps.com'});
@@ -67,6 +66,37 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
   });
 }
 
+
+var sendNotification = function(data) {
+  var headers = {
+    "Content-Type": "application/json; charset=utf-8",
+    "Authorization": "Basic MzI3ZjgyNTYtYjdmNC00ZWI5LTgyNzYtZjUxMDIxMWU3YTQ4"
+  };
+  
+  var options = {
+    host: "onesignal.com",
+    port: 443,
+    path: "/api/v1/notifications",
+    method: "POST",
+    headers: headers
+  };
+  
+  var https = require('https');
+  var req = https.request(options, function(res) {  
+    res.on('data', function(data) {
+      console.log("Response:");
+      console.log(JSON.parse(data));
+    });
+  });
+  
+  req.on('error', function(e) {
+    console.log("ERROR:");
+    console.log(e);
+  });
+  
+  req.write(JSON.stringify(data));
+  req.end();
+};
 
 Parse.Cloud.beforeSave("Invitation", function(request, response) {  
 
@@ -157,6 +187,8 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
     });    
 });
 
+
+//ADD DEVICE TOKEN 
 Parse.Cloud.beforeSave("PushNotification", function(request, response) { 
   //Before save new push must disable the others
   if (request.object.get("enable")) {
@@ -165,11 +197,9 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
     pushQuery.equalTo('apnsToken', request.object.get("apnsToken"));
     pushQuery.find()
       .then((results) => {
-        console.log("Logging........QUERY.............");
         for (let i = 0; i < results.length; ++i) {
           results[i].set("enable",false);
           results[i].save();
-          console.log("Logging........SAVED............. "+i);
         }
         response.success("Successful");
       })
@@ -181,6 +211,33 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
   }
 
 });
+
+
+
+
+//SEND ALERT WHEN AN ANSWER IS POST
+Parse.Cloud.afterSave("Answer", function(request) {
+  const query = new Parse.Query("Question");
+  query.get(request.object.get("questionObjId").id)
+    .then(function(questionObj) {
+      let questioner = questionObj.get("userObjectId");
+      console.log(questioner.id);
+
+      var message = { 
+        app_id: oneSignalAppId,
+        contents: {"en": "English Message"},
+        include_player_ids: ["ebedaf80-a66f-47a9-902d-1160f9a758bb"]
+      };
+      
+      sendNotification(message);
+
+      return 
+    })
+    .catch(function(error) {
+      console.error("Got an error " + error.code + " : " + error.message);
+    });
+});
+
 
 // ADD NEW PROFILE THEN CONNECT THE NEW PROFILE WITH USERNAME
 // AFTER ADDING, CHECK THE FLAG IF THIS NEW USER CREATING NEW GROUP OR JOINING AN EXISTING GROUP
