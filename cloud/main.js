@@ -221,23 +221,28 @@ Parse.Cloud.afterSave("Answer", function(request) {
   query.get(request.object.get("questionObjId").id)
     .then(function(questionObj) {
 
-      console.log("Logging............ALERT...............");
-      let questioner = questionObj.get("userObjectId");      
+      console.log("Logging............ALERT...............");   
       request.object.get("userProfileObjId").fetch({
         success: function(userProfileObj) {
           let responserName = userProfileObj.get("lastName");
-          console.log(responserName);
-          console.log(questionObj.get("questionTitle"));
-          console.log("Dr." + responserName + " recently responsed to your question:\""+questionObj.get("questionTitle")+"\"");
-          var message = { 
-            app_id: oneSignalAppId,
-            contents: {"en":   "Dr." + responserName + " recently responsed to your question:\""+questionObj.get("questionTitle")+"\""},
-            include_player_ids: ["ebedaf80-a66f-47a9-902d-1160f9a758bb"]
-          };
+
+          var pushQuery = new Parse.Query("PushNotification");
+          pushQuery.equalTo('userObjectId', questionObj.get("userObjectId"));
+          pushQuery.find().then(function (results) {
+            console.log(results.get("playerId"));
+            var message = { 
+              app_id: oneSignalAppId,
+              contents: {"en":   "Dr." + responserName + " recently responsed to your question:\""+questionObj.get("questionTitle")+"\""},
+              include_player_ids: [results.get("playerId")]
+            };
+            
+            sendNotification(message);
+            return 
+          }, function (err) {
+            console.error('Error: ' + error.code + ' - ' + error.message);
+          });
           
-          sendNotification(message);
     
-          return 
         },
         error: function(error) {
             console.error('Error: ' + error.code + ' - ' + error.message);
