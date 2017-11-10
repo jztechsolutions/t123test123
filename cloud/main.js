@@ -221,10 +221,14 @@ Parse.Cloud.afterSave("Answer", function(request) {
   query.get(request.object.get("questionObjId").id)
     .then(function(questionObj) {
 
+      console.log("Logging............ALERT...............");
       let questioner = questionObj.get("userObjectId");
-      console.log(questioner.id);
-      let responserProfile  = request.object.get("userProfileObjId")
-      let responserName     = responserProfile.object.get("lastName")
+      let responserProfile  = request.object.get("userProfileObjId");
+      let responserName     = responserProfile.object.get("lastName");
+
+      console.log(responserName);
+      console.log(questionObj.get("questionTitle"));
+      console.log("Dr." + responserName + " recently responsed to your question:\""+questionObj.get("questionTitle")+"\"");
       var message = { 
         app_id: oneSignalAppId,
         contents: {"en":   "Dr." + responserName + " recently responsed to your question:\""+questionObj.get("questionTitle")+"\""},
