@@ -223,20 +223,28 @@ Parse.Cloud.afterSave("Answer", function(request) {
 
       console.log("Logging............ALERT...............");
       let questioner = questionObj.get("userObjectId");      
-      let responserName     = request.object.get("userProfileObjId").lastName;
-
-      console.log(responserName);
-      console.log(questionObj.get("questionTitle"));
-      console.log("Dr." + responserName + " recently responsed to your question:\""+questionObj.get("questionTitle")+"\"");
-      var message = { 
-        app_id: oneSignalAppId,
-        contents: {"en":   "Dr." + responserName + " recently responsed to your question:\""+questionObj.get("questionTitle")+"\""},
-        include_player_ids: ["ebedaf80-a66f-47a9-902d-1160f9a758bb"]
-      };
+      request.get("userProfileObjId").fetch({
+        success: function(userProfileObj) {
+          let responserName = userProfileObj.get("lastName");
+          console.log(responserName);
+          console.log(questionObj.get("questionTitle"));
+          console.log("Dr." + responserName + " recently responsed to your question:\""+questionObj.get("questionTitle")+"\"");
+          var message = { 
+            app_id: oneSignalAppId,
+            contents: {"en":   "Dr." + responserName + " recently responsed to your question:\""+questionObj.get("questionTitle")+"\""},
+            include_player_ids: ["ebedaf80-a66f-47a9-902d-1160f9a758bb"]
+          };
+          
+          sendNotification(message);
+    
+          return 
+        },
+        error: function(error) {
+            console.error('Error: ' + error.code + ' - ' + error.message);
+        }
+      });
       
-      sendNotification(message);
-
-      return 
+      
     })
     .catch(function(error) {
       console.error("Got an error " + error.code + " : " + error.message);
