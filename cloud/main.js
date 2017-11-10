@@ -157,6 +157,23 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
     });    
 });
 
+Parse.Cloud.beforeSave("PushNotification", function(request, response) { 
+  //Before save new push must disable the others
+  var pushQuery =  new Parse.Query("PushNotification");
+  pushQuery.equalTo('playerId', request.params.playerId);
+  pushQuery.equalTo('apnsToken', request.params.apnsToken);
+  pushQuery.find()
+    .then((results) => {
+      for (let i = 0; i < results.length; ++i) {
+        results[i].set("enable",false);
+      }
+      response.success("Successful");
+    })
+    .catch(() =>  {
+      response.error("Can't disable Push Notification for other users who signed in on this device");
+    });
+
+});
 
 // ADD NEW PROFILE THEN CONNECT THE NEW PROFILE WITH USERNAME
 // AFTER ADDING, CHECK THE FLAG IF THIS NEW USER CREATING NEW GROUP OR JOINING AN EXISTING GROUP
