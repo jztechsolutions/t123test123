@@ -160,8 +160,8 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
 Parse.Cloud.beforeSave("PushNotification", function(request, response) { 
   //Before save new push must disable the others
   var pushQuery =  new Parse.Query("PushNotification");
-  pushQuery.equalTo('playerId', request.params.playerId);
-  pushQuery.equalTo('apnsToken', request.params.apnsToken);
+  pushQuery.equalTo('playerId', request.object.get("playerId"));
+  pushQuery.equalTo('apnsToken', request.object.get("apnsToken"));
   pushQuery.find()
     .then((results) => {
       for (let i = 0; i < results.length; ++i) {
