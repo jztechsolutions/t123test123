@@ -159,20 +159,22 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
 
 Parse.Cloud.beforeSave("PushNotification", function(request, response) { 
   //Before save new push must disable the others
-  var pushQuery =  new Parse.Query("PushNotification");
-  pushQuery.equalTo('playerId', request.object.get("playerId"));
-  pushQuery.equalTo('apnsToken', request.object.get("apnsToken"));
-  pushQuery.find()
-    .then((results) => {
-      for (let i = 0; i < results.length; ++i) {
-        results[i].set("enable",false);
-        results[i].save();
-      }
-      response.success("Successful");
-    })
-    .catch(() =>  {
-      response.error("Can't disable Push Notification for other users who signed in on this device");
-    });
+  if (request.object.get("enable")) {
+    var pushQuery =  new Parse.Query("PushNotification");
+    pushQuery.equalTo('playerId', request.object.get("playerId"));
+    pushQuery.equalTo('apnsToken', request.object.get("apnsToken"));
+    pushQuery.find()
+      .then((results) => {
+        for (let i = 0; i < results.length; ++i) {
+          results[i].set("enable",false);
+          results[i].save();
+        }
+        response.success("Successful");
+      })
+      .catch(() =>  {
+        response.error("Can't disable Push Notification for other users who signed in on this device");
+      });
+  }
 
 });
 
