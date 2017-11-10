@@ -222,9 +222,8 @@ Parse.Cloud.afterSave("Answer", function(request) {
     .then(function(questionObj) {
 
       console.log("Logging............ALERT...............");
-      let questioner = questionObj.get("userObjectId");
-      let responserProfile  = request.object.get("userProfileObjId");
-      let responserName     = responserProfile.object.get("lastName");
+      let questioner = questionObj.get("userObjectId");      
+      let responserName     = request.object.get("userProfileObjId").lastName;
 
       console.log(responserName);
       console.log(questionObj.get("questionTitle"));
