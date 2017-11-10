@@ -227,18 +227,22 @@ Parse.Cloud.afterSave("Answer", function(request) {
           let responserName = userProfileObj.get("lastName");
 
           var userPointer = {"__type":"Pointer","className":"_User","objectId":questionObj.get("userObjectId").id};
-          console.log(userPointer);
 
           var pushQuery = new Parse.Query("PushNotification");
           pushQuery.equalTo('userObjectId', userPointer);
+          pushQuery.equalTo('enable',true);
           pushQuery.find()
           .then(function (results) {
             console.log("Logging............TOKEN...............");
-            console.log(results.get("playerId"));
+            var deviceTokenList = [];
+            for (let i = 0; i < results.length; ++i) {
+              deviceTokenList.push(results[i].get("playerId"));             
+            }            
+            console.log(deviceTokenList);
             var message = { 
               app_id: oneSignalAppId,
               contents: {"en":   "Dr." + responserName + " recently responsed to your question:\""+questionObj.get("questionTitle")+"\""},
-              include_player_ids: [results.get("playerId")]
+              include_player_ids: deviceTokenList
             };
             
             sendNotification(message);
