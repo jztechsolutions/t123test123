@@ -153,8 +153,10 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         let newSpecialitySettingDict = result.get("specialitySetting");        
         
         newSpecialitySettingDict[newSpecKey] = settingDict;
-        if (preUpdatedSpecKey) {          
+        if (!(Object.keys(preUpdatedSettingDict).length === 0)) {          
           newSpecialitySettingDict[preUpdatedSpecKey] = preUpdatedSettingDict;       
+        }else{
+          console.log("Logging............EMPTY-preUpdatedSettingDict...............");
         }
 
         result.set("specialitySetting",newSpecialitySettingDict);
@@ -212,8 +214,13 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
 
 });
 
+//SEND ALERT WHEN A MEMBER POST A QUESTION IN MY FIELD
+//Parse.Cloud.afterSave("Question", function(request) {
+
+  //var networkPointer = {"__type":"Pointer","className":"Networking","objectId":request.object.get("networkObjId").id};
 
 
+//}
 
 //SEND ALERT WHEN AN ANSWER IS POST
 Parse.Cloud.afterSave("Answer", function(request) {
