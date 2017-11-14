@@ -6,6 +6,12 @@ Parse.Cloud.define('Hello', function(request, response) {
   response.success('Hello from BodyBookApps Team');
 });
 
+
+/***************************************************************************/
+/****************************** SEND SMS ***********************************/
+/***************************************************************************/
+
+
 function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
 {
   var invitationMSG  = recieverName + ", please join my Curbside Consult network.\nYou can start by downloading the app today and exploring it. https://goo.gl/qYcjsh";  
@@ -24,6 +30,11 @@ function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
       console.error(err);      
     });
 }
+
+
+/***************************************************************************/
+/************************ SEND INVITATION EMAIL ****************************/
+/***************************************************************************/
 
 function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
 {
@@ -66,6 +77,9 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
   });
 }
 
+/***************************************************************************/
+/********************************* INVITATION  *****************************/
+/***************************************************************************/
 
 var sendNotification = function(data) {
   var headers = {
@@ -189,8 +203,15 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
     });    
 });
 
+/***************************************************************************/
+/******************* ALERT/ PUSH NOTIFICATION ******************************/
+/***************************************************************************/
 
+
+//---------------------------------------------------------------
 //ADD DEVICE TOKEN 
+//---------------------------------------------------------------
+
 Parse.Cloud.beforeSave("PushNotification", function(request, response) { 
   //Before save new push must disable the others
   if (request.object.get("enable")) {
@@ -214,7 +235,9 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
 
 });
 
+//---------------------------------------------------------------
 //SEND ALERT WHEN A MEMBER POST A QUESTION IN MY FIELD
+//---------------------------------------------------------------
 //Parse.Cloud.afterSave("Question", function(request) {
 
   //var networkPointer = {"__type":"Pointer","className":"Networking","objectId":request.object.get("networkObjId").id};
@@ -222,7 +245,9 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
 
 //}
 
-//SEND ALERT WHEN AN ANSWER IS POST
+//---------------------------------------------------------------
+//SEND ALERT WHEN AN NEW ANSWER IS POST
+//---------------------------------------------------------------
 Parse.Cloud.afterSave("Answer", function(request) {
   const query = new Parse.Query("Question");
   query.get(request.object.get("questionObjId").id)
@@ -272,8 +297,17 @@ Parse.Cloud.afterSave("Answer", function(request) {
 });
 
 
+/***************************************************************************/
+/**************************** USER PROFILE *********************************/
+/***************************************************************************/
+
+
+//---------------------------------------------------------------
 // ADD NEW PROFILE THEN CONNECT THE NEW PROFILE WITH USERNAME
 // AFTER ADDING, CHECK THE FLAG IF THIS NEW USER CREATING NEW GROUP OR JOINING AN EXISTING GROUP
+//---------------------------------------------------------------
+
+
 Parse.Cloud.define("AddNewProfile", function(request, response){
   //Get userId who call this function from client side
   if (!request.user) {    
@@ -306,7 +340,6 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
           userProfile.set("pri_spec",request.params.pri_spec);  
           userProfile.set("med_sch",request.params.med_sch);
           userProfile.set("grad_yr",request.params.grad_yr);
-          userProfile.addUnique("myNetworksObjId",request.params.myNetworksObjId);
 
           userProfile.save(null, {
             success: function(newProfile) {
@@ -346,7 +379,8 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
 
 
 
-Parse.Cloud.define("RemoveProfileXXX", function(request, response){
+// DELETE A USER PROFILE 
+Parse.Cloud.define("RemoveProfileX0XOX_HIDDEN", function(request, response){
   //Get userId who call this function from client side
   if (!request.user) {
     console.log("Invalid..............................");
@@ -374,6 +408,10 @@ Parse.Cloud.define("RemoveProfileXXX", function(request, response){
 });
 
 
+
+/***************************************************************************/
+/**************************** USER SESSION *********************************/
+/***************************************************************************/
 
 Parse.Cloud.define('DestroyUserSessions', function(req, res) {
     //the user that sends the request
@@ -410,9 +448,11 @@ Parse.Cloud.define('DestroyUserSessions', function(req, res) {
 
 
 
+/***************************************************************************/
+/**************************** EMAIL TEMPLATE *******************************/
+/***************************************************************************/
 
-
-
+// TEMP: SHOULD READ FROM A TEMPLATE FILES
 // Email template
 function generateInvitationEmailNewUser() {
     var reciever = arguments[0];
