@@ -340,6 +340,7 @@ Parse.Cloud.define("AddNewProfile", function(request, response){
           userProfile.set("pri_spec",request.params.pri_spec);  
           userProfile.set("med_sch",request.params.med_sch);
           userProfile.set("grad_yr",request.params.grad_yr);
+          userProfile.set("email",request.params.email);
 
           userProfile.save(null, {
             success: function(newProfile) {
