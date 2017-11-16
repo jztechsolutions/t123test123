@@ -196,7 +196,7 @@ var sendNotification = function(data) {
       console.log("Response:");
       console.log(JSON.parse(resData));
 
-      saveSentNotification(resData["id"], data["contents"]["en"],data["include_player_ids"]);
+      saveSentNotification(JSON.parse(resData)["id"], data["contents"]["en"],data["include_player_ids"]);
     });
   });
   
