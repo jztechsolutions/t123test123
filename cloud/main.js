@@ -81,36 +81,6 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
 /********************************* INVITATION  *****************************/
 /***************************************************************************/
 
-var sendNotification = function(data) {
-  var headers = {
-    "Content-Type": "application/json; charset=utf-8",
-    "Authorization": "Basic MzI3ZjgyNTYtYjdmNC00ZWI5LTgyNzYtZjUxMDIxMWU3YTQ4"
-  };
-  
-  var options = {
-    host: "onesignal.com",
-    port: 443,
-    path: "/api/v1/notifications",
-    method: "POST",
-    headers: headers
-  };
-  
-  var https = require('https');
-  var req = https.request(options, function(res) {  
-    res.on('data', function(data) {
-      console.log("Response:");
-      console.log(JSON.parse(data));
-    });
-  });
-  
-  req.on('error', function(e) {
-    console.log("ERROR:");
-    console.log(e);
-  });
-  
-  req.write(JSON.stringify(data));
-  req.end();
-};
 
 Parse.Cloud.beforeSave("Invitation", function(request, response) {  
 
@@ -206,7 +176,48 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
 /***************************************************************************/
 /******************* ALERT/ PUSH NOTIFICATION ******************************/
 /***************************************************************************/
+var sendNotification = function(data) {
+  var headers = {
+    "Content-Type": "application/json; charset=utf-8",
+    "Authorization": "Basic MzI3ZjgyNTYtYjdmNC00ZWI5LTgyNzYtZjUxMDIxMWU3YTQ4"
+  };
+  
+  var options = {
+    host: "onesignal.com",
+    port: 443,
+    path: "/api/v1/notifications",
+    method: "POST",
+    headers: headers
+  };
+  
+  var https = require('https');
+  var req = https.request(options, function(res) {  
+    res.on('data', function(resData) {
+      console.log("Response:");
+      console.log(JSON.parse(resData));
 
+      saveSentNotification(resData["id"], data["contents"]["en"],data["include_player_ids"]);
+    });
+  });
+  
+  req.on('error', function(e) {
+    console.log("ERROR:");
+    console.log(e);
+  });
+  
+  req.write(JSON.stringify(data));
+  req.end();
+};
+
+
+function saveSentNotification(notificationId,content, playerIds){
+  let Notification = Parse.Object.extend("Notification");
+  var notification = new Notification();  
+  notification.set("notificationId",notificationId);
+  notification.set("content",content);
+  notification.set("playerIds",playerIds);
+  notification.save();
+};
 
 //---------------------------------------------------------------
 //ADD DEVICE TOKEN 
@@ -252,8 +263,6 @@ Parse.Cloud.afterSave("Answer", function(request) {
   const query = new Parse.Query("Question");
   query.get(request.object.get("questionObjId").id)
     .then(function(questionObj) {
-
-      console.log("Logging............ALERT...............");   
       request.object.get("userProfileObjId").fetch({
         success: function(userProfileObj) {
           let responserName = userProfileObj.get("lastName");
