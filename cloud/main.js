@@ -252,12 +252,39 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
 //---------------------------------------------------------------
 //SEND ALERT WHEN A MEMBER POST A QUESTION IN MY FIELD
 //---------------------------------------------------------------
-//Parse.Cloud.afterSave("Question", function(request) {
+// Parse.Cloud.afterSave("Question", function(request) {
 
-  //var networkPointer = {"__type":"Pointer","className":"Networking","objectId":request.object.get("networkObjId").id};
+  // var networkPointer = {"__type":"Pointer","className":"Networking","objectId":request.object.get("networkObjId").id};
+  
+  // var targetSpec = request.object.get("tag")[0];
+
+  // request.object.get("userProfileObjId").fetch({
+  //   success: function(userProfileObj) {
+
+  //     let askerName = userProfileObj.get("lastName");
+
+  //     request.object.get("networkObjId").fetch({
+  //       success: function(networkObj) {
+  //         var specialityLinkUserObjId = networkObj.get("specialityLinkUserObjId");
+        
+  //         var userIdArray = specialityLinkUserObjId[targetSpec]
 
 
-//}
+  //       },
+  //       error: function(error) {
+  //           console.error('Error: ' + error.code + ' - ' + error.message);
+  //       }
+  //     });
+
+  //   },
+  //   error: function(error) {
+  //       console.error('Error: ' + error.code + ' - ' + error.message);
+  //   }
+  // });
+
+  
+
+// });
 
 //---------------------------------------------------------------
 //SEND ALERT WHEN AN NEW ANSWER IS POST
@@ -268,6 +295,7 @@ Parse.Cloud.afterSave("Answer", function(request) {
     .then(function(questionObj) {
       request.object.get("userProfileObjId").fetch({
         success: function(userProfileObj) {
+
           let responserName = userProfileObj.get("lastName");
 
           var userPointer = {"__type":"Pointer","className":"_User","objectId":questionObj.get("userObjectId").id};
@@ -281,18 +309,24 @@ Parse.Cloud.afterSave("Answer", function(request) {
             var deviceTokenList = [];
             for (let i = 0; i < results.length; ++i) {
               deviceTokenList.push(results[i].get("playerId"));             
-            }            
-            console.log(deviceTokenList);
+            }     
+
+            var alertMsg = "";
+            if (request.object.get("numberLike") > 0) {
+              alertMsg = "Your colleague liked a response of your question:\""+questionObj.get("questionTitle")+"\"";
+            }else{
+              alertMsg = "Dr." + responserName + " recently responsed to your question:\""+questionObj.get("questionTitle")+"\"";
+            }
+
             var message = { 
               app_id: oneSignalAppId,
-              contents: {"en":   "Dr." + responserName + " recently responsed to your question:\""+questionObj.get("questionTitle")+"\""},
+              contents: {"en":   alertMsg},
               include_player_ids: deviceTokenList
             };
             
 
             var notificationType = {"type":"Answer","objectId":request.object.id,"targetObjId":request.object.get("questionObjId").id};
-            console.log("Logging...........................");
-            console.log(notificationType);
+            
             sendNotification(message, userPointer, notificationType);
             return 
           }, function (err) {
