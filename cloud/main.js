@@ -290,7 +290,7 @@ Parse.Cloud.afterSave("Answer", function(request) {
             };
             
 
-            var notificationType = {"type":"Answer","objectId":request.object.get("objectId"),"targetObjId":request.object.get("questionObjId").id};
+            var notificationType = {"type":"Answer","objectId":request.object.id,"targetObjId":request.object.get("questionObjId").id};
             console.log("Logging...........................");
             console.log(notificationType);
             sendNotification(message, userPointer, notificationType);
