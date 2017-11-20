@@ -252,39 +252,75 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
 //---------------------------------------------------------------
 //SEND ALERT WHEN A MEMBER POST A QUESTION IN MY FIELD
 //---------------------------------------------------------------
-// Parse.Cloud.afterSave("Question", function(request) {
+Parse.Cloud.afterSave("Question", function(request) {
 
-  // var networkPointer = {"__type":"Pointer","className":"Networking","objectId":request.object.get("networkObjId").id};
+  var networkPointer = {"__type":"Pointer","className":"Networking","objectId":request.object.get("networkObjId").id};
   
-  // var targetSpec = request.object.get("tag")[0];
+  var targetSpec = request.object.get("tag")[0];
 
-  // request.object.get("userProfileObjId").fetch({
-  //   success: function(userProfileObj) {
+  //Go to Profile Class get Name and Spec tag of user asking this question
+  request.object.get("userProfileObjId").fetch({
+    success: function(userProfileObj) {
 
-  //     let askerName = userProfileObj.get("lastName");
+      let askerName = userProfileObj.get("lastName");
 
-  //     request.object.get("networkObjId").fetch({
-  //       success: function(networkObj) {
-  //         var specialityLinkUserObjId = networkObj.get("specialityLinkUserObjId");
+      //Go to Networking Class to get userId of all member has the same spec with question spec tag
+      request.object.get("networkObjId").fetch({
+        success: function(networkObj) {
+          var specialityLinkUserObjId = networkObj.get("specialityLinkUserObjId");
         
-  //         var userIdArray = specialityLinkUserObjId[targetSpec]
+          //List all User ObjectId whom have same spec with the question tag          
+          var userIdArray = specialityLinkUserObjId[targetSpec]
+
+          //Look for playerId/Device Token for those Ids
 
 
-  //       },
-  //       error: function(error) {
-  //           console.error('Error: ' + error.code + ' - ' + error.message);
-  //       }
-  //     });
+          if (userIdArray.length > 0) {
 
-  //   },
-  //   error: function(error) {
-  //       console.error('Error: ' + error.code + ' - ' + error.message);
-  //   }
-  // });
+            var pushQuery =  new Parse.Query("PushNotification");
+            pushQuery.containedIn("userObjectId", userIdArray);            
+            pushQuery.find()
+              .then((results) => {
+                  
+                console.log("Logging............TOKEN...............");
+                var deviceTokenList = [];
+                for (let i = 0; i < results.length; ++i) {
+                  deviceTokenList.push(results[i].get("playerId"));             
+                }
+
+                var alertMsg = "Dr." + askerName + " recently post a question in your field:\""+questionObj.get("questionTitle")+"\"";          
+
+                var message = { 
+                  app_id: oneSignalAppId,
+                  contents: {"en":   alertMsg},
+                  include_player_ids: deviceTokenList                  
+                };
+                var notificationType = {"type":"Question","objectId":request.object.id,"targetObjId":request.object.get("userObjectId").id};
+                console.log("Logging............ALERT SENT...............");
+                console.log(deviceTokenList);
+                sendNotification(message, userPointer, notificationType);
+              })
+              .catch(function(error) {
+                console.error("Got an error " + error.code + " : " + error.message);
+              });            
+          }
+          return
+
+        },
+        error: function(error) {
+            console.error('Error: ' + error.code + ' - ' + error.message);
+        }
+      });
+
+    },
+    error: function(error) {
+        console.error('Error: ' + error.code + ' - ' + error.message);
+    }
+  });
 
   
 
-// });
+});
 
 //---------------------------------------------------------------
 //SEND ALERT WHEN AN NEW ANSWER IS POST
