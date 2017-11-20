@@ -278,7 +278,8 @@ Parse.Cloud.afterSave("Question", function(request) {
           if (userIdArray.length > 0) {
 
             var pushQuery =  new Parse.Query("PushNotification");
-            pushQuery.containedIn("userObjectId", userIdArray);            
+            pushQuery.containedIn("userObjectId", userIdArray);
+            pushQuery.equalTo('enable',true);           
             pushQuery.find()
               .then((results) => {
                   
@@ -295,7 +296,7 @@ Parse.Cloud.afterSave("Question", function(request) {
                     contents: {"en":   alertMsg},
                     include_player_ids: [targetPlayerID]                  
                   };
-                  var userPointer = results[i].get("userObjectId").id;
+                  var userPointer = {"__type":"Pointer","className":"_User","objectId":results[i].get("userObjectId").id}; 
 
                   var notificationType = {"type":"Question","objectId":request.object.id,"targetObjId":request.object.get("userObjectId").id};
                   console.log("Logging............ALERT SENT TO "+userPointer+"...............");
