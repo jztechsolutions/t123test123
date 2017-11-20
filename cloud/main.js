@@ -288,7 +288,7 @@ Parse.Cloud.afterSave("Question", function(request) {
                   deviceTokenList.push(results[i].get("playerId"));             
                 }
 
-                var alertMsg = "Dr." + askerName + " recently post a question in your field:\""+questionObj.get("questionTitle")+"\"";          
+                var alertMsg = "Dr." + askerName + " recently post a question in your field:\""+request.object.get("questionTitle")+"\"";          
 
                 var message = { 
                   app_id: oneSignalAppId,
