@@ -283,22 +283,28 @@ Parse.Cloud.afterSave("Question", function(request) {
               .then((results) => {
                   
                 console.log("Logging............TOKEN...............");
-                var deviceTokenList = [];
-                for (let i = 0; i < results.length; ++i) {
-                  deviceTokenList.push(results[i].get("playerId"));             
+                
+                for (let i = 0; i < results.length; ++i) {      
+
+                  var targetUserID = results[i].get("playerId");
+
+                  var alertMsg = "Dr." + askerName + " recently post a question in your field:\""+request.object.get("questionTitle")+"\"";          
+                  
+                  var message = { 
+                    app_id: oneSignalAppId,
+                    contents: {"en":   alertMsg},
+                    include_player_ids: [targetUserID]                  
+                  };
+                  var userPointer = results[i].get("userObjectId").id;
+
+                  var notificationType = {"type":"Question","objectId":request.object.id,"targetObjId":request.object.get("userObjectId").id};
+                  console.log("Logging............ALERT SENT TO "+userPointer+"...............");
+                  console.log(deviceTokenList);
+                  sendNotification(message, userPointer, notificationType);
+
                 }
 
-                var alertMsg = "Dr." + askerName + " recently post a question in your field:\""+request.object.get("questionTitle")+"\"";          
-
-                var message = { 
-                  app_id: oneSignalAppId,
-                  contents: {"en":   alertMsg},
-                  include_player_ids: deviceTokenList                  
-                };
-                var notificationType = {"type":"Question","objectId":request.object.id,"targetObjId":request.object.get("userObjectId").id};
-                console.log("Logging............ALERT SENT...............");
-                console.log(deviceTokenList);
-                sendNotification(message, userPointer, notificationType);
+                
               })
               .catch(function(error) {
                 console.error("Got an error " + error.code + " : " + error.message);
