@@ -286,20 +286,20 @@ Parse.Cloud.afterSave("Question", function(request) {
                 
                 for (let i = 0; i < results.length; ++i) {      
 
-                  var targetUserID = results[i].get("playerId");
+                  var targetPlayerID = results[i].get("playerId");
 
                   var alertMsg = "Dr." + askerName + " recently post a question in your field:\""+request.object.get("questionTitle")+"\"";          
                   
                   var message = { 
                     app_id: oneSignalAppId,
                     contents: {"en":   alertMsg},
-                    include_player_ids: [targetUserID]                  
+                    include_player_ids: [targetPlayerID]                  
                   };
                   var userPointer = results[i].get("userObjectId").id;
 
                   var notificationType = {"type":"Question","objectId":request.object.id,"targetObjId":request.object.get("userObjectId").id};
                   console.log("Logging............ALERT SENT TO "+userPointer+"...............");
-                  console.log(deviceTokenList);
+                  console.log(targetPlayerID);
                   sendNotification(message, userPointer, notificationType);
 
                 }
