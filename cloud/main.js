@@ -260,7 +260,7 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
 //---------------------------------------------------------------
 Parse.Cloud.afterSave("Question", function(request) {
 
-  if (request.object.get("numberAnswer") > 0 {
+  if (request.object.get("numberAnswer") > 0) {
     //Skip to send out alert when someone comment since it was triggered in AfterSave "Answer"
     return;
   }
