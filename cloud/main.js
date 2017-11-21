@@ -232,6 +232,7 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
     var pushQuery =  new Parse.Query("PushNotification");
     pushQuery.equalTo('playerId', request.object.get("playerId"));
     pushQuery.equalTo('apnsToken', request.object.get("apnsToken"));
+    pushQuery.notEqualTo('userObjectId', request.object.get("userObjectId"))
     pushQuery.equalTo('enable', true);
     pushQuery.find()
       .then((results) => {
@@ -241,7 +242,7 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
           console.log(results[i].get("playerId"));
 
           results[i].set("enable",false);
-
+          
           console.log("Logging............SAVE...............");
           results[i].save();
         }
@@ -252,7 +253,7 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
       });
   }else{
     console.log("Logging............DISABLE ...............");
-    return;
+    response.success();
   }
 
 });
