@@ -421,6 +421,7 @@ Parse.Cloud.define("sendMsgToAllMembers", function(request, response){
         if (userIdArray.length > 0) {
           console.log("Logging............MSG USER ID ...............");
           console.log(userIdArray);
+
           var pushQuery =  new Parse.Query("PushNotification");
           pushQuery.containedIn("userObjectId", userIdArray);
           pushQuery.equalTo('enable',true);           
@@ -428,7 +429,7 @@ Parse.Cloud.define("sendMsgToAllMembers", function(request, response){
             .then((pushNotificationResults) => {
               console.log("Logging..........MSG PUSH...............");
               var deviceTokenList = [];
-              for (let i = 0; i < results.length; ++i) {
+              for (let i = 0; i < pushNotificationResults.length; ++i) {
                 deviceTokenList.push(pushNotificationResults[i].get("playerId"));             
               }     
   
