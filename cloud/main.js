@@ -241,8 +241,7 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
           results[i].set("enable",false);
           console.log("Logging............SAVE...............");
           results[i].save();
-        }
-        response.success("Successful");
+        }        
       })
       .catch(() =>  {
         response.error("Can't disable Push Notification for other users who signed in on this device");
