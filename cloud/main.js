@@ -232,12 +232,14 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
     var pushQuery =  new Parse.Query("PushNotification");
     pushQuery.equalTo('playerId', request.object.get("playerId"));
     pushQuery.equalTo('apnsToken', request.object.get("apnsToken"));
+    pushQuery.equalTo('enable', true);
     pushQuery.find()
       .then((results) => {
         console.log("Logging............EXIST RECORD...............");
         for (let i = 0; i < results.length; ++i) {
           console.log(results[i].get("playerId"));
           results[i].set("enable",false);
+          console.log("Logging............SAVE...............");
           results[i].save();
         }
         response.success("Successful");
@@ -246,7 +248,7 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
         response.error("Can't disable Push Notification for other users who signed in on this device");
       });
   }else{
-    console.log("Logging............DISABLE...............");
+    console.log("Logging............DISABLE ...............");
     response.success("Updated Successful");
   }
 
