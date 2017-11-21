@@ -237,16 +237,11 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
       .then((results) => {
         //List of records that have same playerId and APNS token
         //There should be only one device enable/active
-        
-        console.log("Logging............EXIST RECORD...............");
-        for (let i = 0; i < results.length; ++i) {
-
-          console.log(results[i].get("playerId"));
-
-          results[i].set("enable",false);
-          
-          console.log("Logging............SAVE...............");
-          results[i].save();
+        for (let i = 0; i < results.length; ++i) {         
+          if (results[i].get("userObjectId") != request.object.get("userObjectId")){
+            results[i].set("enable",false);                        
+            results[i].save();            
+          }          
         }
         response.success();
       })
@@ -264,6 +259,11 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
 //SEND ALERT WHEN A MEMBER POST A QUESTION IN MY FIELD
 //---------------------------------------------------------------
 Parse.Cloud.afterSave("Question", function(request) {
+
+  if (request.object.get("numberAnswer") > 0 {
+    //Skip to send out alert when someone comment since it was triggered in AfterSave "Answer"
+    return;
+  }
 
   var networkPointer = {"__type":"Pointer","className":"Networking","objectId":request.object.get("networkObjId").id};
   
