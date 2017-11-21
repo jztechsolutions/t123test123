@@ -232,10 +232,12 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
     var pushQuery =  new Parse.Query("PushNotification");
     pushQuery.equalTo('playerId', request.object.get("playerId"));
     pushQuery.equalTo('apnsToken', request.object.get("apnsToken"));
-    pushQuery.notEqualTo('userObjectId', request.object.get("userObjectId"))
     pushQuery.equalTo('enable', true);
     pushQuery.find()
       .then((results) => {
+        //List of records that have same playerId and APNS token
+        //There should be only one device enable/active
+        
         console.log("Logging............EXIST RECORD...............");
         for (let i = 0; i < results.length; ++i) {
 
