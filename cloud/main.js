@@ -399,6 +399,66 @@ Parse.Cloud.afterSave("Answer", function(request) {
 });
 
 
+//---------------------------------------------------------------
+//SEND ALERT TO ALL MEMBERS
+//---------------------------------------------------------------
+Parse.Cloud.define("sendMsgToAllMembers", function(request, response){
+  if (!request.user) {    
+    response.error("Access Denied - Unauthorized");
+  }else{
+    var userId = request.user.id;    
+    var networkPointer = {"__type":"Pointer","className":"Networking","objectId":request.params.networkId};
+
+    var networkGraphQuery =  new Parse.Query("NetworkGraph");
+    networkGraphQuery.equalTo('networkId', networkPointer);    
+    networkGraphQuery.find()
+      .then((results) => {
+        var userIdArray = [];
+        for (let i = 0; i < results.length; ++i) {
+          userIdArray.push(results[i].get("memberUserObjId").id);             
+        }
+
+        if (userIdArray.length > 0) {
+          console.log("Logging............MSG USER ID ...............");
+          console.log(userIdArray);
+          var pushQuery =  new Parse.Query("PushNotification");
+          pushQuery.containedIn("userObjectId", userIdArray);
+          pushQuery.equalTo('enable',true);           
+          pushQuery.find()
+            .then((pushNotificationResults) => {
+              console.log("Logging..........MSG PUSH...............");
+              var deviceTokenList = [];
+              for (let i = 0; i < results.length; ++i) {
+                deviceTokenList.push(pushNotificationResults[i].get("playerId"));             
+              }     
+  
+              var message = { 
+                app_id: oneSignalAppId,
+                contents: {"en": request.params.msg},
+                headings: {"en": request.params.groupName},
+                include_player_ids: deviceTokenList
+              };
+              
+  
+              var notificationType = {"type":"AdminMsg","objectId":userId,"targetObjId":userId};
+              
+              sendNotification(message, userPointer, notificationType);
+              console.log("Logging..........ADMIN MSG SENT...............");
+            })
+            .catch(function(error) {
+              console.error("Got an error " + error.code + " : " + error.message);
+            });            
+        }
+        
+        response.success();
+      })
+      .catch(() =>  {
+        response.error("Can't disable Push Notification for other users who signed in on this device");
+      });
+  }
+});
+
+
 /***************************************************************************/
 /**************************** USER PROFILE *********************************/
 /***************************************************************************/
