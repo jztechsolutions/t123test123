@@ -235,13 +235,19 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
     pushQuery.equalTo('enable', true);
     pushQuery.find()
       .then((results) => {
-        console.log("Logging............EXIST RECORD...............");
-        for (let i = 0; i < results.length; ++i) {
-          console.log(results[i].get("playerId"));
-          results[i].set("enable",false);
-          console.log("Logging............SAVE...............");
-          results[i].save();
-        }        
+        if (results.length>0) {
+          console.log("Logging............EXIST RECORD...............");
+          for (let i = 0; i < results.length; ++i) {
+            console.log(results[i].get("playerId"));
+            results[i].set("enable",false);
+            console.log("Logging............SAVE...............");
+            results[i].save();
+          }
+        }else{
+          response.success("Successful");
+        }
+        
+        
       })
       .catch(() =>  {
         response.error("Can't disable Push Notification for other users who signed in on this device");
