@@ -420,15 +420,12 @@ Parse.Cloud.define("sendMsgToAllMembers", function(request, response){
         }
 
         if (userIdArray.length > 0) {
-          console.log("Logging............MSG USER ID ...............");
-          console.log(userIdArray);
-
+          
           var pushQuery =  new Parse.Query("PushNotification");
           pushQuery.containedIn("userObjectId", userIdArray);
           pushQuery.equalTo('enable',true);           
           pushQuery.find()
-            .then((pushNotificationResults) => {
-              console.log("Logging..........MSG PUSH...............");
+            .then((pushNotificationResults) => {            
               var deviceTokenList = [];
               for (let i = 0; i < pushNotificationResults.length; ++i) {
                 deviceTokenList.push(pushNotificationResults[i].get("playerId"));             
@@ -442,11 +439,9 @@ Parse.Cloud.define("sendMsgToAllMembers", function(request, response){
                 include_player_ids: deviceTokenList
               };
               
-  
               var notificationType = {"type":"AdminMsg","objectId":userId,"targetObjId":userId};
               
-              sendNotification(message, userPointer, notificationType);
-              console.log("Logging..........ADMIN MSG SENT...............");
+              sendNotification(message, userPointer, notificationType);              
             })
             .catch(function(error) {
               console.error("Got an error " + error.code + " : " + error.message);
