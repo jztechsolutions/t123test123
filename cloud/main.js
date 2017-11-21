@@ -273,8 +273,6 @@ Parse.Cloud.afterSave("Question", function(request) {
           var userIdArray = specialityLinkUserObjId[targetSpec]
 
           //Look for playerId/Device Token for those Ids
-
-
           if (userIdArray.length > 0) {
 
             var pushQuery =  new Parse.Query("PushNotification");
@@ -284,7 +282,7 @@ Parse.Cloud.afterSave("Question", function(request) {
               .then((results) => {
                   
                 console.log("Logging............TOKEN...............");
-                
+                console.log(userIdArray);
                 for (let i = 0; i < results.length; ++i) {      
 
                   var targetPlayerID = results[i].get("playerId");
