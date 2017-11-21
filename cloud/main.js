@@ -406,7 +406,8 @@ Parse.Cloud.define("sendMsgToAllMembers", function(request, response){
   if (!request.user) {    
     response.error("Access Denied - Unauthorized");
   }else{
-    var userId = request.user.id;    
+    var userId = request.user.id;  
+    var userPointer = {"__type":"Pointer","className":"_User","objectId":userId};  
     var networkPointer = {"__type":"Pointer","className":"Networking","objectId":request.params.networkId};
 
     var networkGraphQuery =  new Parse.Query("NetworkGraph");
@@ -433,6 +434,7 @@ Parse.Cloud.define("sendMsgToAllMembers", function(request, response){
                 deviceTokenList.push(pushNotificationResults[i].get("playerId"));             
               }     
   
+              console.log(deviceTokenList);
               var message = { 
                 app_id: oneSignalAppId,
                 contents: {"en": request.params.msg},
