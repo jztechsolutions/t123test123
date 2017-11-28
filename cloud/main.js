@@ -176,7 +176,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
 /***************************************************************************/
 /******************* ALERT/ PUSH NOTIFICATION ******************************/
 /***************************************************************************/
-var sendNotification = function(data, userObjectId, type) {
+var sendNotification = function(data, userTriggeredAlert, type) {
   var headers = {
     "Content-Type": "application/json; charset=utf-8",
     "Authorization": "Basic MzI3ZjgyNTYtYjdmNC00ZWI5LTgyNzYtZjUxMDIxMWU3YTQ4"
@@ -196,7 +196,7 @@ var sendNotification = function(data, userObjectId, type) {
       console.log("Response:");
       console.log(JSON.parse(resData));
 
-      saveSentNotification(JSON.parse(resData)["id"], data["contents"]["en"],data["include_player_ids"],userObjectId, type);
+      saveSentNotification(JSON.parse(resData)["id"], data["contents"]["en"],data["include_player_ids"],userTriggeredAlert, type);
     });
   });
   
@@ -210,13 +210,13 @@ var sendNotification = function(data, userObjectId, type) {
 };
 
 
-function saveSentNotification(notificationId,content, playerIds, userObjectId, type){
+function saveSentNotification(notificationId,content, playerIds, userTriggeredAlert, type){
   let Notification = Parse.Object.extend("Notification");
   var notification = new Notification();  
   notification.set("notificationId",notificationId);
   notification.set("content",content);
   notification.set("playerIds",playerIds);
-  notification.set("userObjectId",userObjectId);
+  notification.set("userTriggeredAlert",userTriggeredAlert);
   notification.set("type",type);
   
   notification.save();
