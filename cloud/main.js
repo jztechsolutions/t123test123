@@ -238,7 +238,7 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
         //List of records that have same playerId and APNS token
         //There should be only one device enable/active
         for (let i = 0; i < results.length; ++i) {         
-          if (results[i].get("userObjectId") != request.user){
+          if (results[i].get("userObjectId").id != request.user.id){
             results[i].set("enable",false);                        
             results[i].save();            
           }          
