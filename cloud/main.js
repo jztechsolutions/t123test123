@@ -193,8 +193,8 @@ var sendNotification = function(data, userTriggeredAlert, type) {
   var https = require('https');
   var req = https.request(options, function(res) {  
     res.on('data', function(resData) {
-      console.log("Response:");
-      console.log(JSON.parse(resData));
+      // console.log("Response:");
+      // console.log(JSON.parse(resData));
 
       saveSentNotification(JSON.parse(resData)["id"], data["contents"]["en"],data["include_player_ids"],userTriggeredAlert, type);
     });
@@ -238,7 +238,7 @@ Parse.Cloud.beforeSave("PushNotification", function(request, response) {
         //List of records that have same playerId and APNS token
         //There should be only one device enable/active
         for (let i = 0; i < results.length; ++i) {         
-          if (results[i].get("userObjectId") != request.object.get("userObjectId")){
+          if (results[i].get("userObjectId") != request.user){
             results[i].set("enable",false);                        
             results[i].save();            
           }          
@@ -333,9 +333,6 @@ Parse.Cloud.afterSave("Question", function(request) {
         console.error('Error: ' + error.code + ' - ' + error.message);
     }
   });
-
-  
-
 });
 
 //---------------------------------------------------------------
@@ -348,8 +345,10 @@ Parse.Cloud.afterSave("Answer", function(request) {
       request.object.get("userProfileObjId").fetch({
         success: function(userProfileObj) {
 
+          //User triggered this alert
           let responserName = userProfileObj.get("lastName");
 
+          //Get the owner of the question
           var userPointer = {"__type":"Pointer","className":"_User","objectId":questionObj.get("userObjectId").id};
 
           var pushQuery = new Parse.Query("PushNotification");
