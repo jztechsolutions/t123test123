@@ -226,10 +226,10 @@ function saveSentNotification(notificationId,content, playerIds, userTriggeredAl
 //ADD DEVICE TOKEN 
 //---------------------------------------------------------------
 
-Parse.Cloud.beforeSave("PushNotification", function(request, response) { 
+Parse.Cloud.beforeSave("PushDevice", function(request, response) { 
   //Before save new push must disable the others
   if (request.object.get("enable")) {
-    var pushQuery =  new Parse.Query("PushNotification");
+    var pushQuery =  new Parse.Query("PushDevice");
     pushQuery.equalTo('playerId', request.object.get("playerId"));
     pushQuery.equalTo('apnsToken', request.object.get("apnsToken"));
     pushQuery.equalTo('enable', true);
@@ -286,7 +286,7 @@ Parse.Cloud.afterSave("Question", function(request) {
           //Look for playerId/Device Token for those Ids
           if (userIdArray.length > 0) {
 
-            var pushQuery =  new Parse.Query("PushNotification");
+            var pushQuery =  new Parse.Query("PushDevice");
             pushQuery.containedIn("userObjectId", userIdArray);
             pushQuery.equalTo('enable',true);           
             pushQuery.find()
@@ -351,7 +351,7 @@ Parse.Cloud.afterSave("Answer", function(request) {
           //Get the owner of the question
           var userPointer = {"__type":"Pointer","className":"_User","objectId":questionObj.get("userObjectId").id};
 
-          var pushQuery = new Parse.Query("PushNotification");
+          var pushQuery = new Parse.Query("PushDevice");
           pushQuery.equalTo('userObjectId', userPointer);
           pushQuery.equalTo('enable',true);
           pushQuery.find()
@@ -420,7 +420,7 @@ Parse.Cloud.define("sendMsgToAllMembers", function(request, response){
 
         if (userIdArray.length > 0) {
           
-          var pushQuery =  new Parse.Query("PushNotification");
+          var pushQuery =  new Parse.Query("PushDevice");
           pushQuery.containedIn("userObjectId", userIdArray);
           pushQuery.equalTo('enable',true);           
           pushQuery.find()
