@@ -801,4 +801,3 @@ function generateInvitationEmailExistingUser() {
     
     return invitationEmail;
 }
-	
