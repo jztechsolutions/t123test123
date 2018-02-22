@@ -690,7 +690,7 @@ function generateInvitationEmailNewUser() {
 '										You can start by downloading the app today and exploring it.<br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
-'										<a href="https://goo.gl/qYcjsh" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Download & Register</a><br/><br/>'+
+'										<a href="https://itunes.apple.com/se/app/curbside-consult/id1273396415?l=en&mt=8" class="btn-primary" itemprop="url" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #00b33c; margin: 0; border-color: #00b33c; border-style: solid; border-width: 10px 20px;">Download & Register</a><br/><br/>'+
 '									</td>'+
 '								</tr><tr><td class="content-block" >'+
 '										Here is a direct link to connect with my network. Note: You can click here after downloading the app and signing up.<br/>'+
