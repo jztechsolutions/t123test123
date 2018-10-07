@@ -14,7 +14,7 @@ Parse.Cloud.define('Hello', function(request, response) {
 
 function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
 {
-  var invitationMSG  = recieverName + ", please join my Curbside Consult network.\nYou can start by downloading the app today and exploring it. https://goo.gl/qYcjsh";  
+  var invitationMSG  = recieverName + ", please join my Curbside Consult network.\nYou can start by downloading the app today and exploring it. https://goo.gl/tuKMWS";  
 
   var client = require('twilio')('AC4b51bbdcaae206f74fff39eee9549be6', '5af7ac55302d113a233db59953a0c215');
 
