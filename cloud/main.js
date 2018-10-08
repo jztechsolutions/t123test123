@@ -16,7 +16,11 @@ function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
 {
   var invitationMSG  = recieverName + ", please join my Curbside Consult network.\nYou can start by downloading the app today and exploring it. https://goo.gl/tuKMWS";  
 
-  var client = require('twilio')('AC4b51bbdcaae206f74fff39eee9549be6', '5af7ac55302d113a233db59953a0c215');
+  const accountSid = 'AC4b51bbdcaae206f74fff39eee9549be6';
+  const authToken = '5af7ac55302d113a233db59953a0c215';
+  const client = require('twilio')(accountSid, authToken);
+
+  console.log("Logging............SMS PREP...............");
 
   client.api.messages
     .create({
@@ -95,10 +99,10 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
 
   var preUpdatedSettingDict = {};
 
-
+ 
   //Get Network Obj from Invitation to update the counts
   var query = new Parse.Query("Networking");
-
+ 
   query.get(request.object.get("networkObjId").id)  
   
     .then(function(result){
@@ -162,6 +166,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
           },
           error: function(userProfile, error) {
             console.log("Logging............FAIL TO SAVE...............");
+            console.log(error);
             response.error(error);
           }
         });
@@ -169,6 +174,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
       }
     })
     .catch(function(error){
+      console.log("Logging............SAVED...............");
       response.error(error);      
     });    
 });
