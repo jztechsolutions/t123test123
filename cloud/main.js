@@ -21,7 +21,7 @@ function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
   client.api.messages
     .create({
       to: smsNumbSendTo, 
-      from: '+19292003005 ', 
+      from: '+18509056789', 
       body: invitationMSG
     }).then(function(responseData){
       console.log("Logging............SENT...............");
