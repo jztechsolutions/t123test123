@@ -118,7 +118,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
       if (invitationOutCount == 1 && invitationStatus != "Accepted") {        
         settingDict["pending"] = settingDict["pending"]+1;
       }else if (invitationOutCount > 1) {
-        /*When the email resent, check if the new spec is updated*/
+        /*When the email/sms resent, check if the new spec is updated*/
         console.log("Logging............Resend...............");          
         if (newSpecKey != preUpdatedSpecKey) {
           //At this point we know that the spec was updated/changed
@@ -170,6 +170,8 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
             response.error(error);
           }
         });
+
+        console.log("Logging............END SAVE...............");
         
       }
     })
