@@ -172,16 +172,12 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         //       response.error(error);
         //     }
         //   });
-        // console.log("Logging............END SAVE...............");
-        result.save(function (err, savedResult) 
-        {
-          console.log("Logging............SAVING...............");
-          if (err) {
-            console.log("Logging............NOT SAVED ERROR...............");
-            console.log(error);
-            response.error(error);
-          }else{
-            console.log("Logging............SAVED...............");
+        // console.log("Logging............END SAVE..............."); 
+
+        result.save()
+        
+        .then (function(savedResult) {
+          console.log("Logging............SAVED...............");
             //Just send out invitation email when inviting only not updating invitation status and open email track                     
              
             if (invitationStatus != "Accepted") {
@@ -192,9 +188,15 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
               }
             
             }
-            response.success();            
-          }
+            response.success();
+       
+        })
+        .catch(function(error){
+          console.log("Logging............FAIL TO SAVE...............");
+              console.log(error);
+              response.error(error);      
         });
+        console.log("Logging............END SAVE..............."); 
       }
     })
     .catch(function(error){
