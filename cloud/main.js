@@ -42,6 +42,8 @@ function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
 
 function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
 {
+
+  console.log("Logging............EMAIL PREP...............");
   var mailgun = require('mailgun-js')({apiKey: 'key-77d43d079cb3f40d2c99d8da46a7c452', domain: 'bodybookapps.com'});
   
   var invitationSubject  = "";
@@ -70,6 +72,9 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
         if (sendError) {
           console.error(sendError);
           // response.error("Uh oh, something went wrong");          
+        }else{
+          console.log("Logging............SENT...............");
+          console.log('Email sent');
         }            
       });
 
@@ -150,6 +155,35 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
 
         result.set("specialitySetting",newSpecialitySettingDict);
 
+
+        result.save(null, {
+          success: function(savedResult) { 
+            
+            console.log("Logging............SAVED...............");            
+              
+            //Just send out invitation email when inviting only not updating invitation status and open email track                     
+             
+            if (invitationStatus != "Accepted") {
+              if (request.object.get("email")) {                
+                sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));           
+              }else if (request.object.get("cellPhone")){                                  
+                sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("cellPhone"),request.object.get("invitationCode"));                
+              }                         
+            }                          
+            response.success();
+          },
+          error: function(userProfile, error) {
+            console.log("Logging............FAIL TO SAVE...............");              
+            console.log(error);              
+            response.error(error);
+          }
+        })
+        .catch(function(error){
+          console.log("Logging............FAIL TO SAVE 2...............");              
+          console.log(error);                  
+          response.error(error);    
+        });
+
         // result.save(null, 
         //   {          
         //     success: function() {                          
@@ -167,35 +201,35 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         //     },
         //     error: function(userProfile, error) 
         //     {
-        //       console.log("Logging............FAIL TO SAVE...............");
-        //       console.log(error);
-        //       response.error(error);
+              // console.log("Logging............FAIL TO SAVE...............");
+              // console.log(error);
+              // response.error(error);
         //     }
         //   });
         // console.log("Logging............END SAVE..............."); 
 
-        result.save()
+        // result.save()
         
-        .then (function(savedResult) {
-          console.log("Logging............SAVED...............");
-            //Just send out invitation email when inviting only not updating invitation status and open email track                     
+        // .then (function(savedResult) {
+        //   console.log("Logging............SAVED...............");
+        //     //Just send out invitation email when inviting only not updating invitation status and open email track                     
              
-            if (invitationStatus != "Accepted") {
-              if (request.object.get("email")) {                
-                sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));
-              }else if (request.object.get("cellPhone")){                
-                sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("cellPhone"),request.object.get("invitationCode"));
-              }
+        //     if (invitationStatus != "Accepted") {
+        //       if (request.object.get("email")) {                
+        //         sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));
+        //       }else if (request.object.get("cellPhone")){                
+        //         sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("cellPhone"),request.object.get("invitationCode"));
+        //       }
             
-            }
-            response.success();
+        //     }
+        //     response.success();
        
-        })
-        .catch(function(error){
-          console.log("Logging............FAIL TO SAVE...............");
-              console.log(error);
-              response.error(error);      
-        });
+        // })
+        // .catch(function(error){
+        //   console.log("Logging............FAIL TO SAVE...............");              
+        //   console.log(error);              
+        //   response.error(error);      
+        // });
         console.log("Logging............END SAVE..............."); 
       }
     })
