@@ -51,40 +51,77 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
 
   var userQuery = new Parse.Query(Parse.User);  
   userQuery.equalTo('email', emailSendTo);
-  userQuery.count({
-    success: function(userCount) {
-      if (userCount > 0){
-        invitationSubject  = recieverName + ", please join my Curbside Consult network.";
-        invitationTemplate = generateInvitationEmailExistingUser(recieverName,senderName,token);
-      }else{
-        invitationSubject  = "I'd like to invite you to join my Curbside Consult network.";
-        invitationTemplate = generateInvitationEmailNewUser(recieverName,senderName,token);
-      }
-      var mail = {
-        from: "CurbsideConsult@bodybookapps.com",
-        to: emailSendTo,
-        subject: invitationSubject,
-        body: "Invitation",
-        html: invitationTemplate
-      };
 
-      mailgun.messages().send(mail, function (sendError, body) {
-        if (sendError) {
-          console.log(mail);
-          console.error(sendError);
-          // response.error("Uh oh, something went wrong");          
-        }else{
-          console.log("Logging............SENT...............");
-          console.log('Email sent');
-        }            
-      });
-
-    },
-    error: function(err) {      
-      console.log('Failed to user by Email');
-      console.error(err)
+  userQuery.count()
+  .then((userCount) => {
+    console.log("Logging............FOUND USER BY EMAIL...............");
+    if (userCount > 0){
+      invitationSubject  = recieverName + ", please join my Curbside Consult network.";
+      invitationTemplate = generateInvitationEmailExistingUser(recieverName,senderName,token);
+    }else{
+      invitationSubject  = "I'd like to invite you to join my Curbside Consult network.";
+      invitationTemplate = generateInvitationEmailNewUser(recieverName,senderName,token);
     }
+    var mail = {
+      from: "CurbsideConsult@bodybookapps.com",
+      to: emailSendTo,
+      subject: invitationSubject,
+      body: "Invitation",
+      html: invitationTemplate
+    };
+
+    mailgun.messages().send(mail, function (sendError, body) {
+      if (sendError) {
+        console.log(mail);
+        console.error(sendError);
+        // response.error("Uh oh, something went wrong");          
+      }else{
+        console.log("Logging............SENT...............");
+        console.log('Email sent');
+      }            
+    });
+  })
+  .catch(function(err){
+    console.log('Failed to user by Email');
+    console.error(err);
   });
+
+
+  // userQuery.count({
+  //   success: function(userCount) {
+  //     console.log("Logging............FOUND USER BY EMAIL...............");
+  //     if (userCount > 0){
+  //       invitationSubject  = recieverName + ", please join my Curbside Consult network.";
+  //       invitationTemplate = generateInvitationEmailExistingUser(recieverName,senderName,token);
+  //     }else{
+  //       invitationSubject  = "I'd like to invite you to join my Curbside Consult network.";
+  //       invitationTemplate = generateInvitationEmailNewUser(recieverName,senderName,token);
+  //     }
+  //     var mail = {
+  //       from: "CurbsideConsult@bodybookapps.com",
+  //       to: emailSendTo,
+  //       subject: invitationSubject,
+  //       body: "Invitation",
+  //       html: invitationTemplate
+  //     };
+
+  //     mailgun.messages().send(mail, function (sendError, body) {
+  //       if (sendError) {
+  //         console.log(mail);
+  //         console.error(sendError);
+  //         // response.error("Uh oh, something went wrong");          
+  //       }else{
+  //         console.log("Logging............SENT...............");
+  //         console.log('Email sent');
+  //       }            
+  //     });
+
+  //   },
+  //   error: function(err) {      
+  //     console.log('Failed to user by Email');
+  //     console.error(err)
+  //   }
+  // });
 }
 
 /***************************************************************************/
