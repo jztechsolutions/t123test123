@@ -156,7 +156,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         result.set("specialitySetting",newSpecialitySettingDict);
         
         result.save()
-        .then () {
+        .then (function(savedResult) {
           console.log("Logging............SAVED...............");            
           //Just send out invitation email when inviting only not updating invitation status and open email track                                 
           if (invitationStatus != "Accepted") {              
