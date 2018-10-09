@@ -70,6 +70,7 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
 
       mailgun.messages().send(mail, function (sendError, body) {
         if (sendError) {
+          console.log(mail);
           console.error(sendError);
           // response.error("Uh oh, something went wrong");          
         }else{
@@ -80,7 +81,7 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
 
     },
     error: function(err) {      
-      
+      console.log('Failed to user by Email');
       console.error(err)
     }
   });
@@ -224,9 +225,6 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         // console.log("Logging............END SAVE..............."); 
 
         // result.save()
-        
-        
-        console.log("Logging............END SAVE..............."); 
       }
     })
     .catch(function(error){
