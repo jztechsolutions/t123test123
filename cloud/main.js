@@ -159,7 +159,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         result.save(null, {
           success: function(savedResult) { 
             
-            console.log("Logging............SAVED...............");            
+            console.log("Logging............SAVED-success...............");            
               
             //Just send out invitation email when inviting only not updating invitation status and open email track                     
              
@@ -173,15 +173,30 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
             response.success();
           },
           error: function(userProfile, error) {
-            console.log("Logging............FAIL TO SAVE...............");              
+            console.log("Logging............FAIL TO SAVE-success...............");              
             console.log(error);              
             response.error(error);
           }
         })
+        .then (function(savedResult) {
+          console.log("Logging............SAVED-Then...............");
+            //Just send out invitation email when inviting only not updating invitation status and open email track                     
+             
+            if (invitationStatus != "Accepted") {
+              if (request.object.get("email")) {                
+                sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));
+              }else if (request.object.get("cellPhone")){                
+                sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("cellPhone"),request.object.get("invitationCode"));
+              }
+            
+            }
+            response.success();
+       
+        })
         .catch(function(error){
-          console.log("Logging............FAIL TO SAVE 2...............");              
-          console.log(error);                  
-          response.error(error);    
+          console.log("Logging............FAIL TO SAVE-then...............");              
+          console.log(error);              
+          response.error(error);      
         });
 
         // result.save(null, 
@@ -210,26 +225,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
 
         // result.save()
         
-        // .then (function(savedResult) {
-        //   console.log("Logging............SAVED...............");
-        //     //Just send out invitation email when inviting only not updating invitation status and open email track                     
-             
-        //     if (invitationStatus != "Accepted") {
-        //       if (request.object.get("email")) {                
-        //         sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));
-        //       }else if (request.object.get("cellPhone")){                
-        //         sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("cellPhone"),request.object.get("invitationCode"));
-        //       }
-            
-        //     }
-        //     response.success();
-       
-        // })
-        // .catch(function(error){
-        //   console.log("Logging............FAIL TO SAVE...............");              
-        //   console.log(error);              
-        //   response.error(error);      
-        // });
+        
         console.log("Logging............END SAVE..............."); 
       }
     })
