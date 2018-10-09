@@ -28,7 +28,6 @@ function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
       from: '+18509056789', 
       body: invitationMSG
     }).then(function(responseData){
-      console.log("Logging............SENT...............");
       console.log('SMS sent');
     }).catch(function(err){      
       console.error(err);      
@@ -76,7 +75,6 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
         console.error(sendError);
         // response.error("Uh oh, something went wrong");          
       }else{
-        console.log("Logging............SENT...............");
         console.log('Email sent');
       }            
     });
@@ -86,42 +84,6 @@ function sendInvitationEmail(senderName,recieverName,emailSendTo,token)
     console.error(err);
   });
 
-
-  // userQuery.count({
-  //   success: function(userCount) {
-  //     console.log("Logging............FOUND USER BY EMAIL...............");
-  //     if (userCount > 0){
-  //       invitationSubject  = recieverName + ", please join my Curbside Consult network.";
-  //       invitationTemplate = generateInvitationEmailExistingUser(recieverName,senderName,token);
-  //     }else{
-  //       invitationSubject  = "I'd like to invite you to join my Curbside Consult network.";
-  //       invitationTemplate = generateInvitationEmailNewUser(recieverName,senderName,token);
-  //     }
-  //     var mail = {
-  //       from: "CurbsideConsult@bodybookapps.com",
-  //       to: emailSendTo,
-  //       subject: invitationSubject,
-  //       body: "Invitation",
-  //       html: invitationTemplate
-  //     };
-
-  //     mailgun.messages().send(mail, function (sendError, body) {
-  //       if (sendError) {
-  //         console.log(mail);
-  //         console.error(sendError);
-  //         // response.error("Uh oh, something went wrong");          
-  //       }else{
-  //         console.log("Logging............SENT...............");
-  //         console.log('Email sent');
-  //       }            
-  //     });
-
-  //   },
-  //   error: function(err) {      
-  //     console.log('Failed to user by Email');
-  //     console.error(err)
-  //   }
-  // });
 }
 
 /***************************************************************************/
@@ -192,32 +154,10 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         }
 
         result.set("specialitySetting",newSpecialitySettingDict);
-
-
-        result.save(null, {
-          success: function(savedResult) { 
-            
-            console.log("Logging............SAVED-success...............");            
-              
-            //Just send out invitation email when inviting only not updating invitation status and open email track                     
-             
-            if (invitationStatus != "Accepted") {
-              if (request.object.get("email")) {                
-                sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));           
-              }else if (request.object.get("cellPhone")){                                  
-                sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("cellPhone"),request.object.get("invitationCode"));                
-              }                         
-            }                          
-            response.success();
-          },
-          error: function(userProfile, error) {
-            console.log("Logging............FAIL TO SAVE-success...............");              
-            console.log(error);              
-            response.error(error);
-          }
-        })
+        
+        result.save()
         .then (function(savedResult) {
-          console.log("Logging............SAVED-Then...............");
+          console.log("Logging............SAVED...............");
             //Just send out invitation email when inviting only not updating invitation status and open email track                     
              
             if (invitationStatus != "Accepted") {
@@ -228,40 +168,14 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
               }
             
             }
-            response.success();
+            response.success(savedResult);
        
         })
         .catch(function(error){
-          console.log("Logging............FAIL TO SAVE-then...............");              
+          console.log("Logging............FAIL TO SAVE...............");              
           console.log(error);              
           response.error(error);      
         });
-
-        // result.save(null, 
-        //   {          
-        //     success: function() {                          
-        //       console.log("Logging............SAVED...............");            
-        //       //Just send out invitation email when inviting only not updating invitation status and open email track                     
-             
-        //       if (invitationStatus != "Accepted") {
-        //         if (request.object.get("email")) {                
-        //           sendInvitationEmail(request.object.get("inviter"),request.object.get("invitee"),request.object.get("email"),request.object.get("invitationCode"));
-        //         }else if (request.object.get("cellPhone")){                
-        //           sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("cellPhone"),request.object.get("invitationCode"));
-        //         }            
-        //       }              
-        //       response.success();            
-        //     },
-        //     error: function(userProfile, error) 
-        //     {
-              // console.log("Logging............FAIL TO SAVE...............");
-              // console.log(error);
-              // response.error(error);
-        //     }
-        //   });
-        // console.log("Logging............END SAVE..............."); 
-
-        // result.save()
       }
     })
     .catch(function(error){
