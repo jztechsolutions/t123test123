@@ -14,7 +14,7 @@ Parse.Cloud.define('Hello', function(request, response) {
 
 function sendInvitationSMS(senderName, recieverName, smsNumbSendTo, token)
 {
-  var invitationMSG  = recieverName + ", please join my Curbside Consult network.\nYou can start by downloading the app today and exploring it. https://goo.gl/tuKMWS";  
+  var invitationMSG  = recieverName + ", please join my Curbside Consult network.\nYou can start by downloading the app today and exploring it. https://goo.gl/tuKMWS\nFrom Dr."+senderName;  
 
   const accountSid = 'AC4b51bbdcaae206f74fff39eee9549be6';
   const authToken = '5af7ac55302d113a233db59953a0c215';
@@ -156,7 +156,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
         result.set("specialitySetting",newSpecialitySettingDict);
         
         result.save()
-        .then (function(savedResult) {
+        .then ((savedResult) => {
           console.log("Logging............SAVED...............");            
           //Just send out invitation email when inviting only not updating invitation status and open email track                                 
           if (invitationStatus != "Accepted") {              
@@ -165,8 +165,7 @@ Parse.Cloud.beforeSave("Invitation", function(request, response) {
             }else if (request.object.get("cellPhone")){                            
               sendInvitationSMS(request.object.get("inviter"),request.object.get("invitee"),request.object.get("cellPhone"),request.object.get("invitationCode"));            
             }  
-          }            
-          console.log("Logging............response.success...............");            
+          }               
           response.success("Resent");      
         })
         .catch(function(error){
